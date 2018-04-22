@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="SAS leads 2-1"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:layout_alignParentBottom="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
 
