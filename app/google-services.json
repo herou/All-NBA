@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "589040447717-f9h6k0tjf8ssg30s38q4uodn5pqr9u91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gmail.jorgegilcavazos.ballislife",
+            "certificate_hash": "c5d84d56f4f14496c84eebc42d4cf48226b00573"
+          }
+        },
+        {
           "client_id": "589040447717-nh0s31olqrkvn3p2bev47bntsnn7u6eu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -42,6 +50,13 @@
             {
               "client_id": "589040447717-u96jrk11onge36ecbst17d4bedto1tei.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "589040447717-7s7q7159okp02k152fbb76v21mlmmjds.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swish.ios"
+              }
             }
           ]
         },
@@ -59,6 +74,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "589040447717-f5u4vpmjc08ugqk98pcm0nbjhirkhj3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gmail.jorgegilcavazos.ballislife.debug",
+            "certificate_hash": "3178b10965d8367d2a9bc83aa8d69d42016cfb33"
+          }
+        },
+        {
           "client_id": "589040447717-u96jrk11onge36ecbst17d4bedto1tei.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -73,8 +96,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589040447717-u96jrk11onge36ecbst17d4bedto1tei.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "589040447717-7s7q7159okp02k152fbb76v21mlmmjds.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swish.ios"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2

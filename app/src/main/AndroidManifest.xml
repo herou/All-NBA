@@ -85,6 +85,9 @@
         <activity android:name=".features.gopremium.GoPremiumActivity"
             android:theme="@style/AppTheme.Dark.NoActionBar"
             android:screenOrientation="portrait"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="87003f261e96116d27947fd20dd714ca5a34d579" />
     </application>
 
 </manifest>
