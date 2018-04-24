@@ -19,8 +19,8 @@ android {
         applicationId "com.gmail.jorgegilcavazos.ballislife"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 74
-        versionName "1.2.4.3"
+        versionCode 75
+        versionName "1.2.4.4"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
