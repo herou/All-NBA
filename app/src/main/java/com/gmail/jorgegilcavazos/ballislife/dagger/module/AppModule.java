@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.gmail.jorgegilcavazos.ballislife.features.application.BallIsLifeApplication;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import javax.inject.Singleton;
 
@@ -36,5 +38,15 @@ public class AppModule {
     @Singleton
     public FirebaseAnalytics provideFirebaseAnalytics() {
         return ((BallIsLifeApplication) application).getFirebaseAnalytics();
+    }
+
+    @Provides
+    @Singleton
+    public FirebaseFirestore provideFirestore() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.setFirestoreSettings(new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build());
+        return firestore;
     }
 }

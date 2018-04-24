@@ -14,7 +14,8 @@ import javax.inject.Singleton
 
 @Singleton
 class FavoritesRepositoryImpl @Inject constructor(
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val firestore: FirebaseFirestore
 ) : FavoritesRepository {
 
   companion object {
@@ -33,7 +34,7 @@ class FavoritesRepositoryImpl @Inject constructor(
     lastLoadedDoc = null
     return Observable.create { emitter ->
       loadMoreTrigger.subscribe { limit ->
-        var query = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+        var query = firestore.collection(USERS_COLLECTION)
             .document(localRepository.username)
             .collection(FAV_HIGHLIGHTS_COLLECTION)
             .orderBy(HIGHLIGHT_FAV_TIME_ATTR_KEY, Query.Direction.DESCENDING)
@@ -63,7 +64,7 @@ class FavoritesRepositoryImpl @Inject constructor(
 
   override fun saveToFavorites(highlight: Highlight): Completable {
     return Completable.create { emitter ->
-      FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+      firestore.collection(USERS_COLLECTION)
           .document(localRepository.username)
           .collection(FAV_HIGHLIGHTS_COLLECTION)
           .document(highlight.id)
@@ -78,7 +79,7 @@ class FavoritesRepositoryImpl @Inject constructor(
 
   override fun removeFromFavorites(highlight: Highlight): Completable {
     return Completable.create { emitter ->
-      FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+      firestore.collection(USERS_COLLECTION)
           .document(localRepository.username)
           .collection(FAV_HIGHLIGHTS_COLLECTION)
           .document(highlight.id)

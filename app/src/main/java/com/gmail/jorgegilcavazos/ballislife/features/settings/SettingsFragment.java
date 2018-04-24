@@ -73,6 +73,7 @@ public class SettingsFragment extends PreferenceFragment
     @Inject BaseSchedulerProvider schedulerProvider;
     @Inject LocalRepository localRepository;
     @Inject EventLogger eventLogger;
+    @Inject FirebaseFirestore firestore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -364,19 +365,22 @@ public class SettingsFragment extends PreferenceFragment
         logInStatusPref.setOnPreferenceClickListener(preference -> {
             if (localRepository.getUsername() != null) {
                 localRepository.saveUsername(null);
-                redditAuthentication.deAuthenticateUser().andThen(redditAuthentication
-                        .authenticate()).subscribeOn(schedulerProvider.io()).observeOn
-                        (schedulerProvider.ui()).subscribeWith(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        initLogInStatusText();
-                    }
+                redditAuthentication
+                        .deAuthenticateUser()
+                        .andThen(redditAuthentication.authenticate())
+                        .subscribeOn(schedulerProvider.io())
+                        .observeOn(schedulerProvider.ui())
+                        .subscribeWith(new DisposableCompletableObserver() {
+                            @Override
+                            public void onComplete() {
 
-                    @Override
-                    public void onError(Throwable e) {
+                            }
 
-                    }
-                });
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+                        });
             } else {
                 Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(loginIntent);
@@ -401,9 +405,7 @@ public class SettingsFragment extends PreferenceFragment
                             .findViewById(R.id.feedbackEditText);
                     String feedback = editText.getText().toString();
                     if (!StringUtils.Companion.isNullOrEmpty(feedback)) {
-                        FirebaseFirestore.getInstance()
-                                .collection("feedback")
-                                .add(new Feedback(feedback));
+                        firestore.collection("feedback").add(new Feedback(feedback));
                     }
                     Toast.makeText(getActivity(), R.string.thank_you, Toast.LENGTH_SHORT).show();
                 })

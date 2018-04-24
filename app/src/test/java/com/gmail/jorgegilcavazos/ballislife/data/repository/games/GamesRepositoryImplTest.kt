@@ -4,6 +4,7 @@ import com.gmail.jorgegilcavazos.ballislife.data.actions.games.GamesResult
 import com.gmail.jorgegilcavazos.ballislife.data.service.NbaGamesService
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameV2
 import com.gmail.jorgegilcavazos.ballislife.util.schedulers.TrampolineSchedulerProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -19,6 +20,7 @@ import java.util.*
 class GamesRepositoryImplTest {
 
   @Mock private lateinit var gamesService: NbaGamesService
+  @Mock private lateinit var mockFirestore: FirebaseFirestore
 
   private lateinit var repository: GamesRepositoryImpl
 
@@ -26,7 +28,7 @@ class GamesRepositoryImplTest {
   fun setup() {
     MockitoAnnotations.initMocks(this)
 
-    repository = GamesRepositoryImpl(gamesService, TrampolineSchedulerProvider())
+    repository = GamesRepositoryImpl(gamesService, mockFirestore, TrampolineSchedulerProvider())
   }
 
   @Test
