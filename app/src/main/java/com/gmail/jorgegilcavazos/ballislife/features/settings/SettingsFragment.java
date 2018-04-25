@@ -405,7 +405,11 @@ public class SettingsFragment extends PreferenceFragment
                             .findViewById(R.id.feedbackEditText);
                     String feedback = editText.getText().toString();
                     if (!StringUtils.Companion.isNullOrEmpty(feedback)) {
-                        firestore.collection("feedback").add(new Feedback(feedback));
+                        String username = localRepository.getUsername();
+                        if (username == null) {
+                            username = "Unknown";
+                        }
+                        firestore.collection("feedback").add(new Feedback(username, feedback));
                     }
                     Toast.makeText(getActivity(), R.string.thank_you, Toast.LENGTH_SHORT).show();
                 })
