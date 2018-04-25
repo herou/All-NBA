@@ -36,7 +36,7 @@ class GamesRepositoryImpl @Inject constructor(
           if (it.isEmpty()) {
             Observable.just(GamesUiModel.networkSuccess(emptyList()))
           } else {
-            Observable.just(GamesUiModel.networkSuccess(it.values.sortedBy { it.timeUtc }))
+            Observable.just(GamesUiModel.networkSuccess(sortGamesByUtcThenId(it.values)))
           }
         }
         .subscribeOn(schedulerProvider.io())
@@ -48,7 +48,7 @@ class GamesRepositoryImpl @Inject constructor(
           if (it.isEmpty()) {
             Observable.just(GamesUiModel.memorySuccess(emptyList()))
           } else {
-            Observable.just(GamesUiModel.memorySuccess(it.values.sortedBy { it.timeUtc }))
+            Observable.just(GamesUiModel.memorySuccess(sortGamesByUtcThenId(it.values)))
           }
         }
         .subscribeOn(schedulerProvider.io())
@@ -70,7 +70,9 @@ class GamesRepositoryImpl @Inject constructor(
           if (it.isEmpty()) {
             Observable.just(LoadGamesResult.NoGames)
           } else {
-            Observable.just(LoadGamesResult.Success(it.values.sortedBy { it.timeUtc }, date))
+            Observable.just(
+                LoadGamesResult.Success(sortGamesByUtcThenId(it.values), date)
+            )
           }
         }
         .onErrorReturn { LoadGamesResult.Failure(it) }
@@ -81,7 +83,9 @@ class GamesRepositoryImpl @Inject constructor(
     val memory = memorySource(date).toObservable()
         .concatMap {
           if (it.isNotEmpty()) {
-            Observable.just(LoadGamesResult.Success(it.values.sortedBy { it.timeUtc }, date))
+            Observable.just(
+                LoadGamesResult.Success(sortGamesByUtcThenId(it.values), date)
+            )
           } else {
             Observable.just(LoadGamesResult.NoCachedGames)
           }
@@ -167,6 +171,21 @@ class GamesRepositoryImpl @Inject constructor(
         }
         .doOnSuccess { gamesMap.putAll(it) }
 
+  }
+
+  private fun sortGamesByUtcThenId(games: Collection<GameV2>): List<GameV2> {
+    return games.sortedWith(Comparator { game1: GameV2, game2: GameV2 ->
+      when {
+        game1.timeUtc > game2.timeUtc -> 1
+        game1.timeUtc < game2.timeUtc -> -1
+        game1.timeUtc == game1.timeUtc -> {
+          game1.id.toInt() - game2.id.toInt()
+        }
+        else -> throw IllegalStateException("Comparator reached invalid state " +
+            "where game1.utc is " + game1.timeUtc
+            + "and game2.utc is " + game2.timeUtc)
+      }
+    })
   }
 
   @SuppressLint("VisibleForTests")
