@@ -44,11 +44,9 @@ class GamesPresenter @Inject constructor(
           view.dismissSnackbar()
         }
         is GamesUiModelV2.Success -> {
-          if (view.getCurrentDateShown() == model.date) {
-            view.showGames(gamesListWithFavoriteTeamFirst(model.games.toMutableList()))
-            view.setLoadingIndicator(false)
-            view.setNoGamesIndicator(false)
-          }
+          view.showGames(gamesListWithFavoriteTeamFirst(model.games.toMutableList()))
+          view.setLoadingIndicator(false)
+          view.setNoGamesIndicator(false)
         }
         is GamesUiModelV2.NoCachedGames -> {
           view.setLoadingIndicator(true)

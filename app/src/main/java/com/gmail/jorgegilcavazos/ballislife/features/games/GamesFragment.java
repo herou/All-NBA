@@ -68,7 +68,11 @@ public class GamesFragment extends Fragment implements GamesView,
     private Snackbar snackbar;
     private Unbinder unbinder;
 
-    private Calendar calendar = Calendar.getInstance();
+    /**
+     * The position from 0-500 that this fragment is positioned inside the [GamesHomePagerAdapter],
+     * with 250 being the middle page (i.e., today).
+     */
+    private int position;
 
     private PublishRelay<LoadGamesEvent> loadGamesEvents = PublishRelay.create();
     private PublishRelay<RefreshGamesEvent> refreshGamesEvents = PublishRelay.create();
@@ -77,10 +81,10 @@ public class GamesFragment extends Fragment implements GamesView,
         // Required empty public constructor.
     }
 
-    public static GamesFragment newInstance(Long date) {
+    public static GamesFragment newInstance(int position) {
         GamesFragment fragment = new GamesFragment();
         Bundle args = new Bundle();
-        args.putLong(KEY_DATE, date);
+        args.putInt(KEY_DATE, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,7 +95,7 @@ public class GamesFragment extends Fragment implements GamesView,
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        calendar.setTimeInMillis(getArguments().getLong(KEY_DATE));
+        position = getArguments().getInt(KEY_DATE);
 
         layoutManager = new LinearLayoutManager(getActivity());
         gameAdapter = new GameAdapter(new ArrayList<>(0), localRepository);
@@ -107,10 +111,6 @@ public class GamesFragment extends Fragment implements GamesView,
 
         rvGames.setLayoutManager(layoutManager);
         rvGames.setAdapter(gameAdapter);
-
-        if (savedInstanceState != null) {
-            calendar.setTimeInMillis(savedInstanceState.getLong(SELECTED_TIME));
-        }
 
         presenter.attachView(this);
 
@@ -128,14 +128,13 @@ public class GamesFragment extends Fragment implements GamesView,
     @Override
     public void onResume() {
         super.onResume();
-        loadGamesEvents.accept(new LoadGamesEvent(calendarClone()));
+        loadGamesEvents.accept(new LoadGamesEvent(dateToShow()));
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         listState = layoutManager.onSaveInstanceState();
-        outState.putLong(SELECTED_TIME, calendar.getTime().getTime());
         outState.putParcelable(LIST_STATE, listState);
     }
 
@@ -148,7 +147,7 @@ public class GamesFragment extends Fragment implements GamesView,
 
     @Override
     public void onRefresh() {
-        refreshGamesEvents.accept(new RefreshGamesEvent(calendarClone()));
+        refreshGamesEvents.accept(new RefreshGamesEvent(dateToShow()));
     }
 
     @NotNull
@@ -211,9 +210,12 @@ public class GamesFragment extends Fragment implements GamesView,
             return;
         }
 
-        snackbar = Snackbar.make(getView(), R.string.your_device_is_offline, Snackbar.LENGTH_INDEFINITE)
+        snackbar = Snackbar.make(
+                getView(),
+                R.string.your_device_is_offline,
+                Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.retry, v -> {
-                    refreshGamesEvents.accept(new RefreshGamesEvent(calendarClone()));
+                    refreshGamesEvents.accept(new RefreshGamesEvent(dateToShow()));
                 });
         snackbar.show();
     }
@@ -224,9 +226,12 @@ public class GamesFragment extends Fragment implements GamesView,
             return;
         }
 
-        snackbar = Snackbar.make(getView(), getString(R.string.something_went_wrong, code), Snackbar.LENGTH_SHORT)
+        snackbar = Snackbar.make(
+                getView(),
+                getString(R.string.something_went_wrong, code),
+                Snackbar.LENGTH_SHORT)
                 .setAction(R.string.retry, v -> {
-                    refreshGamesEvents.accept(new RefreshGamesEvent(calendarClone()));
+                    refreshGamesEvents.accept(new RefreshGamesEvent(dateToShow()));
                 });
         snackbar.show();
     }
@@ -238,15 +243,14 @@ public class GamesFragment extends Fragment implements GamesView,
         }
     }
 
-    @NotNull
-    @Override
-    public Calendar getCurrentDateShown() {
-        return calendar;
-    }
-
-    private Calendar calendarClone() {
-        Calendar copy = Calendar.getInstance();
-        copy.setTime(calendar.getTime());
-        return copy;
+    /**
+     * Returns the date that must be used to load games for the current fragment considering the
+     * current date.
+     * The date returned is based on the position of this fragment, where 250 will always be today.
+     */
+    private Calendar dateToShow() {
+        Calendar date = Calendar.getInstance();
+        date.setTimeInMillis(UtilsKt.getDateForPosition(position));
+        return date;
     }
 }

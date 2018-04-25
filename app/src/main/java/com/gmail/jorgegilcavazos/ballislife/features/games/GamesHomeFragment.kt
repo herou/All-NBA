@@ -124,11 +124,11 @@ class GamesHomeFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     date.set(Calendar.YEAR, year)
 
     // Move to selected date.
-    viewPager.currentItem = adapter.getPositionForDate(date.timeInMillis)
+    viewPager.currentItem = getPositionForDate(date.timeInMillis)
   }
 
   private fun setNavigatorText() {
     navigatorText.text = DateFormatUtil.formatNavigatorDate(
-        Date(adapter.getDateForPosition(viewPager.currentItem)))
+        Date(getDateForPosition(viewPager.currentItem)))
   }
 }

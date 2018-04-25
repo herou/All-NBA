@@ -1,9 +1,10 @@
 package com.gmail.jorgegilcavazos.ballislife.features.games
 
-import com.gmail.jorgegilcavazos.ballislife.features.games.GamesUiEvent.*
+import com.gmail.jorgegilcavazos.ballislife.features.games.GamesUiEvent.LoadGamesEvent
+import com.gmail.jorgegilcavazos.ballislife.features.games.GamesUiEvent.OpenGameEvent
+import com.gmail.jorgegilcavazos.ballislife.features.games.GamesUiEvent.RefreshGamesEvent
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameV2
 import io.reactivex.Observable
-import java.util.*
 
 interface GamesView {
 
@@ -28,6 +29,4 @@ interface GamesView {
   fun showErrorSnackbar(code: Int)
 
   fun dismissSnackbar()
-
-  fun getCurrentDateShown(): Calendar
 }
