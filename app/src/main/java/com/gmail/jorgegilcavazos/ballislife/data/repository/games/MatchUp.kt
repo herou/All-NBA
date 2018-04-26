@@ -6,5 +6,7 @@ data class MatchUp(
     val team1_seed: Int = 0,
     val team2_seed: Int = 0,
     val team1_wins: Int = 0,
-    val team2_wins: Int = 0
+    val team2_wins: Int = 0,
+    val conference: String = "",
+    val round: Int = 1
 )

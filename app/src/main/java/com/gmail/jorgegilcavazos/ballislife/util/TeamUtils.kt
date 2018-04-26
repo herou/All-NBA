@@ -14,7 +14,7 @@ class TeamUtils {
       "DAL" -> R.drawable.dal
       "DEN" -> R.drawable.den
       "DET" -> R.drawable.det
-      "GS" -> R.drawable.gsw
+      "GS", "GSW" -> R.drawable.gsw
       "HOU" -> R.drawable.hou
       "IND" -> R.drawable.ind
       "LAC" -> R.drawable.lac
@@ -23,7 +23,7 @@ class TeamUtils {
       "MIA" -> R.drawable.mia
       "MIL" -> R.drawable.mil
       "MIN" -> R.drawable.min
-      "NO" -> R.drawable.nop
+      "NO", "NOP" -> R.drawable.nop
       "NY" -> R.drawable.nyk
       "OKC" -> R.drawable.okc
       "ORL" -> R.drawable.orl
@@ -31,10 +31,10 @@ class TeamUtils {
       "PHX" -> R.drawable.phx
       "POR" -> R.drawable.por
       "SAC" -> R.drawable.sac
-      "SA" -> R.drawable.sas
+      "SA", "SAS" -> R.drawable.sas
       "TOR" -> R.drawable.tor
-      "UTAH" -> R.drawable.uta
-      "WSH" -> R.drawable.was
+      "UTAH", "UTA" -> R.drawable.uta
+      "WSH", "WAS" -> R.drawable.was
       else -> R.drawable.rnbasnoo
     }
 

@@ -24,6 +24,11 @@
             android:id="@+id/navigation_item_2"
             android:icon="@drawable/ic_equalizer_black_24dp"
             android:title="Standings"/>
+
+        <item
+            android:id="@+id/navigation_item_5"
+            android:icon="@drawable/ic_trending_flat_black_24dp"
+            android:title="Playoff Bracket"/>
     </group>
 
     <group

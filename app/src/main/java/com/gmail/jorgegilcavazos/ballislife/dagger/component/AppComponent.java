@@ -14,6 +14,7 @@ import com.gmail.jorgegilcavazos.ballislife.features.highlights.favorites.Favori
 import com.gmail.jorgegilcavazos.ballislife.features.highlights.home.HighlightsFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.login.LoginActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.main.MainActivity;
+import com.gmail.jorgegilcavazos.ballislife.features.playoffs.bracket.BracketFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.posts.PostsFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.profile.ProfileActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.reply.ReplyActivity;
@@ -70,4 +71,6 @@ public interface AppComponent {
     void inject(GamesHomeFragment gamesHomeFragment);
 
     void inject(HighlightsMenuFragment highlightsMenuFragment);
+
+    void inject(BracketFragment bracketFragment);
 }

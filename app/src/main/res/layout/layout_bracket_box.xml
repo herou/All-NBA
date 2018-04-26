@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:minHeight="115dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardBackgroundColor="?attr/cardsDialog"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/team1Logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:src="@drawable/sas"
+            android:adjustViewBounds="true"
+            android:layout_margin="3dp"/>
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp">
+
+            <TextView
+                android:id="@+id/team1Name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="SAS"
+                android:textSize="10sp"
+                android:textAlignment="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/team1Wins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="1"
+                android:textSize="10sp"
+                android:textAlignment="center"
+                android:layout_marginEnd="3dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp">
+
+            <TextView
+                android:id="@+id/team2Name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="GSW"
+                android:textSize="10sp"
+                android:textAlignment="center"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/team2Wins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="3"
+                android:textSize="10sp"
+                android:textAlignment="center"
+                android:layout_marginEnd="3dp"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/team2Logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:src="@drawable/gsw"
+            android:adjustViewBounds="true"
+            android:layout_margin="3dp"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

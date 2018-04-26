@@ -43,6 +43,7 @@ import com.gmail.jorgegilcavazos.ballislife.features.gopremium.GoPremiumActivity
 import com.gmail.jorgegilcavazos.ballislife.features.highlights.HighlightsMenuFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.login.LoginActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.model.SwishTheme;
+import com.gmail.jorgegilcavazos.ballislife.features.playoffs.bracket.BracketFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.posts.PostsFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.profile.ProfileActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.settings.SettingsActivity;
@@ -85,6 +86,7 @@ public class MainActivity extends BaseNoActionBarActivity {
     private static final int STANDINGS_FRAGMENT_ID = 2;
     private static final int POSTS_FRAGMENT_ID = 3;
     private static final int HIGHLIGHTS_FRAGMENT_ID = 4;
+    private static final int PLAYOFF_FRAGMENT_ID = 5;
 
     // Shortcuts should match values in xml/shortcuts
     private static final String SHORTCUT_KEY = "shortcut";
@@ -256,6 +258,10 @@ public class MainActivity extends BaseNoActionBarActivity {
                 break;
             case HIGHLIGHTS_FRAGMENT_ID:
                 setHighlightsFragment();
+                break;
+            case PLAYOFF_FRAGMENT_ID:
+                setPlayoffsFragment();
+                break;
         }
     }
 
@@ -320,6 +326,10 @@ public class MainActivity extends BaseNoActionBarActivity {
                     return true;
                 case R.id.navigation_item_4:
                     setHighlightsFragment();
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                case R.id.navigation_item_5:
+                    setPlayoffsFragment();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 case R.id.navigation_item_9:
@@ -507,6 +517,31 @@ public class MainActivity extends BaseNoActionBarActivity {
 
         expandToolbar();
         selectedFragment = STANDINGS_FRAGMENT_ID;
+    }
+
+    public void setPlayoffsFragment() {
+        setTitle("Playoff Bracket");
+        getSupportActionBar().setSubtitle(null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appBarLayout.setElevation(UnitUtils.convertDpToPixel(4, this));
+        }
+
+        Fragment bracketFragment = null;
+        if (selectedFragment == PLAYOFF_FRAGMENT_ID) {
+            bracketFragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
+            if(!(bracketFragment instanceof BracketFragment)) {
+                bracketFragment = null;
+            }
+        }
+
+        if (bracketFragment == null) {
+            bracketFragment = BracketFragment.Companion.newInstance();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    bracketFragment, R.id.fragment);
+        }
+
+        expandToolbar();
+        selectedFragment = PLAYOFF_FRAGMENT_ID;
     }
 
     public void setPostsFragment(String subreddit) {
