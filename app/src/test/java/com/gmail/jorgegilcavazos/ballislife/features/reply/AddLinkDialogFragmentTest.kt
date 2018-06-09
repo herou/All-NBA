@@ -20,7 +20,7 @@ import org.robolectric.shadows.ShadowAlertDialog
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class,
-        sdk = intArrayOf(25),
+        sdk = [25],
         packageName = "com.gmail.jorgegilcavazos.ballislife")
 /**
  * Tests for the

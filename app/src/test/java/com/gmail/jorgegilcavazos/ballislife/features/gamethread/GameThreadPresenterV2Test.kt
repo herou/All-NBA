@@ -318,7 +318,7 @@ class GameThreadPresenterV2Test {
     val mockSubmission = Mockito.mock(Submission::class.java)
     `when`(mockSubmission.comments).thenReturn(mockCommentNode1)
     `when`(mockCommentNode1.walkTree())
-        .thenReturn(FluentIterable.of(mockCommentNode1, mockCommentNode2))
+        .thenReturn(FluentIterable.of(arrayOf(mockCommentNode1, mockCommentNode2)))
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.found(mockSubmission)))
 
@@ -337,7 +337,7 @@ class GameThreadPresenterV2Test {
     val mockCommentNode1 = Mockito.mock(CommentNode::class.java)
     val mockSubmission = Mockito.mock(Submission::class.java)
     `when`(mockSubmission.comments).thenReturn(mockCommentNode1)
-    `when`(mockCommentNode1.walkTree()).thenReturn(FluentIterable.of())
+    `when`(mockCommentNode1.walkTree()).thenReturn(FluentIterable.of(emptyArray()))
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.found(mockSubmission)))
 

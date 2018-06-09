@@ -33,13 +33,13 @@ class HighlightsMenuFragment : Fragment() {
     BallIsLifeApplication.getAppComponent().inject(this)
   }
 
-  override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
     // Inflate the layout for this fragment
-    return inflater!!.inflate(R.layout.fragment_highlights_menu, container, false)
+    return inflater.inflate(R.layout.fragment_highlights_menu, container, false)
   }
 
-  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     if (premiumService.isPremium()) {
@@ -51,13 +51,13 @@ class HighlightsMenuFragment : Fragment() {
       adView.visibility = View.VISIBLE
     }
 
-    viewPager.adapter = HighlightsPagerAdapter(activity, childFragmentManager)
+    viewPager.adapter = HighlightsPagerAdapter(requireContext(), childFragmentManager)
     tabLayout.setupWithViewPager(viewPager)
   }
 
   override fun onResume() {
     super.onResume()
-    eventLogger.setCurrentScreen(activity, SwishScreen.HIGHLIGHTS)
+    eventLogger.setCurrentScreen(requireActivity(), SwishScreen.HIGHLIGHTS)
   }
 
 }

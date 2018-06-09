@@ -600,6 +600,11 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
 
     }
 
+    @Override
+    public void onRewardedVideoCompleted() {
+
+    }
+
     private void showAddDelayDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title(R.string.worried_about_spoilers)

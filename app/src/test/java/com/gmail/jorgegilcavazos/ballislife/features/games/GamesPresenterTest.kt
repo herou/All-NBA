@@ -86,28 +86,12 @@ class GamesPresenterTest {
     val date = Calendar.getInstance()
     `when`(mockGamesModelTransformer.uiModels(anyObject()))
         .thenReturn(Observable.just(GamesUiModelV2.Success(games, date)))
-    `when`(mockView.getCurrentDateShown()).thenReturn(date)
 
     presenter.attachView(mockView)
 
     verify(mockView).setNoGamesIndicator(false)
     verify(mockView).setLoadingIndicator(false)
     verify(mockView).showGames(games)
-  }
-
-  @Test
-  fun successUiModelButDateChanged() {
-    val games = listOf(createGameV2(), createGameV2())
-    val date = Calendar.getInstance()
-    `when`(mockGamesModelTransformer.uiModels(anyObject()))
-        .thenReturn(Observable.just(GamesUiModelV2.Success(games, date)))
-    `when`(mockView.getCurrentDateShown()).thenReturn(Calendar.getInstance())
-
-    presenter.attachView(mockView)
-
-    verify(mockView, times(0)).setNoGamesIndicator(false)
-    verify(mockView, times(0)).setLoadingIndicator(false)
-    verify(mockView, times(0)).showGames(games)
   }
 
   @Test

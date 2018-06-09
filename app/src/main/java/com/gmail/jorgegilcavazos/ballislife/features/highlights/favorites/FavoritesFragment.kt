@@ -80,7 +80,7 @@ class FavoritesFragment : Fragment(), FavoritesView {
 
     // Only of of the three showCard parameters should be true.
     highlightAdapter = HighlightAdapterV2(
-        context = activity,
+        context = requireContext(),
         highlights = mutableListOf(),
         highlightViewType = viewType,
         isPremium = isPremium(),
@@ -89,12 +89,12 @@ class FavoritesFragment : Fragment(), FavoritesView {
     )
   }
 
-  override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                             savedInstanceState: Bundle?): View? {
-    return inflater!!.inflate(R.layout.fragment_favorites, container, false)
+    return inflater.inflate(R.layout.fragment_favorites, container, false)
   }
 
-  override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     recyclerView.layoutManager = linearLayoutManager
@@ -144,7 +144,7 @@ class FavoritesFragment : Fragment(), FavoritesView {
   override fun favoriteClicks(): Observable<Highlight> = highlightAdapter.getFavoriteClicks()
 
   override fun showRemoveFromFavoritesConfirmation(highlight: Highlight) {
-    MaterialDialog.Builder(activity)
+    MaterialDialog.Builder(requireActivity())
         .title(getString(R.string.fav_deletion_title))
         .content(getString(R.string.fav_deletion_content))
         .positiveText(getString(R.string.fav_deletion_positive))
