@@ -28,7 +28,8 @@
         <item
             android:id="@+id/navigation_item_5"
             android:icon="@drawable/ic_trending_flat_black_24dp"
-            android:title="Playoff Bracket"/>
+            android:title="Playoff Bracket"
+            android:visible="false"/>
     </group>
 
     <group
