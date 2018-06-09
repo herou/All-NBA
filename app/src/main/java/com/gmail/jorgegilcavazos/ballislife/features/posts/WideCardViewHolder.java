@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.data.reddit.RedditAuthentication;
 import com.gmail.jorgegilcavazos.ballislife.features.common.OnSubmissionClickListener;
@@ -20,7 +21,6 @@ import com.gmail.jorgegilcavazos.ballislife.util.RedditUtils;
 import com.gmail.jorgegilcavazos.ballislife.util.Utilities;
 import com.gmail.jorgegilcavazos.ballislife.util.Utilities.ThumbnailType;
 import com.google.common.base.Optional;
-import com.squareup.picasso.Picasso;
 
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.VoteDirection;
@@ -118,13 +118,13 @@ public class WideCardViewHolder extends RecyclerView.ViewHolder {
             String thumbnailUrl = thumbnailTypeUrl.get().second;
             switch (thumbnailType) {
                 case LOW_RES:
-                    Picasso.with(context).load(thumbnailUrl).into(ivThumbnailSmall);
+                    Glide.with(context).load(thumbnailUrl).into(ivThumbnailSmall);
                     ivThumbnailSmall.setVisibility(View.VISIBLE);
                     layoutSmallImageTitle.setVisibility(View.VISIBLE);
                     tvTitleSmall.setVisibility(View.VISIBLE);
                     break;
                 case HIGH_RES:
-                    Picasso.with(context).load(thumbnailUrl).into(ivThumbnail);
+                    Glide.with(context).load(thumbnailUrl).into(ivThumbnail);
                     ivThumbnail.setVisibility(View.VISIBLE);
                     tvTitle.setVisibility(View.VISIBLE);
                     break;

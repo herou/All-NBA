@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.data.reddit.RedditAuthentication;
 import com.gmail.jorgegilcavazos.ballislife.features.common.OnSubmissionClickListener;
@@ -18,7 +19,6 @@ import com.gmail.jorgegilcavazos.ballislife.util.Pair;
 import com.gmail.jorgegilcavazos.ballislife.util.Utilities;
 import com.google.common.base.Optional;
 import com.google.firebase.crash.FirebaseCrash;
-import com.squareup.picasso.Picasso;
 
 import net.dean.jraw.models.Submission;
 
@@ -178,9 +178,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Optional<Pair<Utilities.ThumbnailType, String>> thumbnailTypeUrl =
                     Utilities.getThumbnailToShowFromCustomSubmission(submission);
             if (thumbnailTypeUrl.isPresent()) {
-                Picasso.with(context)
+                Glide.with(context)
                         .load(thumbnailTypeUrl.get().second)
-                        .fetch();
+                        .preload();
             }
         }
     }

@@ -10,12 +10,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.data.reddit.RedditAuthentication;
 import com.gmail.jorgegilcavazos.ballislife.features.model.SubmissionWrapper;
 import com.gmail.jorgegilcavazos.ballislife.util.Constants;
 import com.gmail.jorgegilcavazos.ballislife.util.DateFormatUtil;
-import com.squareup.picasso.Picasso;
 
 import net.dean.jraw.models.VoteDirection;
 
@@ -89,7 +89,7 @@ public class PostListViewHolder extends RecyclerView.ViewHolder {
             tvDomain.setText(domain);
             if (thumbnailToShow != null) {
                 ivThumbnail.setVisibility(View.VISIBLE);
-                Picasso.with(context)
+                Glide.with(context)
                         .load(thumbnailToShow)
                         .into(ivThumbnail);
             } else {

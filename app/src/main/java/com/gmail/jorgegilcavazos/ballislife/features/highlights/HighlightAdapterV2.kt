@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.gmail.jorgegilcavazos.ballislife.R
 import com.gmail.jorgegilcavazos.ballislife.features.common.SwishCardViewHolder
 import com.gmail.jorgegilcavazos.ballislife.features.model.Highlight
@@ -12,7 +13,6 @@ import com.gmail.jorgegilcavazos.ballislife.features.model.HighlightViewType
 import com.gmail.jorgegilcavazos.ballislife.features.model.SwishCard
 import com.gmail.jorgegilcavazos.ballislife.util.StringUtils
 import com.jakewharton.rxrelay2.PublishRelay
-import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -160,10 +160,10 @@ class HighlightAdapterV2(
     for ((_, _, thumbnail, hdThumbnail) in highlights) {
       if (StringUtils.isNullOrEmpty(hdThumbnail)) {
         if (!StringUtils.isNullOrEmpty(thumbnail)) {
-          Picasso.with(context).load(thumbnail).fetch()
+          Glide.with(context).load(thumbnail).preload()
         }
       } else {
-        Picasso.with(context).load(hdThumbnail).fetch()
+        Glide.with(context).load(hdThumbnail).preload()
       }
     }
   }

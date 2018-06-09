@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.data.local.LocalRepository;
 import com.gmail.jorgegilcavazos.ballislife.data.premium.PremiumService;
@@ -25,7 +26,6 @@ import com.gmail.jorgegilcavazos.ballislife.util.Utilities;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.common.base.Optional;
-import com.squareup.picasso.Picasso;
 
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.VoteDirection;
@@ -137,7 +137,7 @@ public class FullCardViewHolder extends RecyclerView.ViewHolder {
             if (thumbnailToShow != null) {
                 ivThumbnail.setVisibility(View.VISIBLE);
                 containerLink.setVisibility(View.GONE);
-                Picasso.with(context).load(thumbnailToShow).into(ivThumbnail);
+                Glide.with(context).load(thumbnailToShow).into(ivThumbnail);
             } else {
                 ivThumbnail.setVisibility(View.GONE);
                 containerLink.setVisibility(View.VISIBLE);

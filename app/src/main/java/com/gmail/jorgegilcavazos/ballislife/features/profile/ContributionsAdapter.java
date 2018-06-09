@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.util.Constants;
 import com.gmail.jorgegilcavazos.ballislife.util.DateFormatUtil;
 import com.gmail.jorgegilcavazos.ballislife.util.RedditUtils;
-import com.squareup.picasso.Picasso;
 
 import net.dean.jraw.models.Comment;
 import net.dean.jraw.models.Contribution;
@@ -104,26 +104,25 @@ public class ContributionsAdapter extends RecyclerView.Adapter<RecyclerView.View
             String domain = post.getDomain();
             holder.linkView.setText("• " + domain);
             if (thumbnailUrl != null) {
-                Picasso.with(context).load(thumbnailUrl).into(holder.thumbnail);
-                if (domain.equals(Constants.STREAMABLE_DOMAIN)) {
-                    holder.thumbnailType
-                            .setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
-                } else if (domain.equals(Constants.IMGUR_DOMAIN )
-                        || domain.equals(Constants.GIPHY_DOMAIN)) {
-                    holder.thumbnailType.setImageResource(R.drawable.ic_gif_black_24dp);
-                } else {
-                    holder.thumbnailType.setVisibility(View.GONE);
+                Glide.with(context).load(thumbnailUrl).into(holder.thumbnail);
+                switch (domain) {
+                    case Constants.STREAMABLE_DOMAIN:
+                        holder.thumbnailType.setImageResource(R.drawable
+                                .ic_play_circle_outline_black_24dp);
+                        break;
+                    case Constants.IMGUR_DOMAIN:
+                    case Constants.GIPHY_DOMAIN:
+                        holder.thumbnailType.setImageResource(R.drawable.ic_gif_black_24dp);
+                        break;
+                    default:
+                        holder.thumbnailType.setVisibility(View.GONE);
+                        break;
                 }
             } else {
                 holder.thumbnailContainer.setVisibility(View.GONE);
             }
         }
-        holder.container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickSubject.onNext(post);
-            }
-        });
+        holder.container.setOnClickListener(v -> clickSubject.onNext(post));
     }
 
     private void setCommentViewHolderViews(CommentViewHolder holder, int position) {
@@ -135,12 +134,7 @@ public class ContributionsAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.timestampTextView.setText(DateFormatUtil.formatRedditDate(comment.getCreated()));
         holder.scoreTextView.setText(context.getString(R.string.points,
                 String.valueOf(comment.getScore())));
-        holder.container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickSubject.onNext(comment);
-            }
-        });
+        holder.container.setOnClickListener(v -> clickSubject.onNext(comment));
     }
 
     public void setData(List<Contribution> data) {

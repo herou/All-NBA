@@ -4,13 +4,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import com.bumptech.glide.Glide
 import com.gmail.jorgegilcavazos.ballislife.features.model.Highlight
 import com.gmail.jorgegilcavazos.ballislife.features.model.HighlightViewType
 import com.gmail.jorgegilcavazos.ballislife.util.StringUtils
 import com.jakewharton.rxrelay2.PublishRelay
-import com.squareup.picasso.Picasso
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.row_highlight_small.view.*
+import kotlinx.android.synthetic.main.row_highlight_small.view.container
+import kotlinx.android.synthetic.main.row_highlight_small.view.shareBtn
+import kotlinx.android.synthetic.main.row_highlight_small.view.thumbnail
+import kotlinx.android.synthetic.main.row_highlight_small.view.thumbnailUnavailable
+import kotlinx.android.synthetic.main.row_highlight_small.view.title
+import kotlinx.android.synthetic.main.row_highlight_small.view.viewThreadText
 
 /**
  * View holder for a highlight.
@@ -28,11 +33,10 @@ class HighlightHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var thumbnailAvailable = true
     if (!StringUtils.isNullOrEmpty(highlight.hdThumbnail)) {
-      Picasso.with(itemView.context).load(highlight.hdThumbnail).into(thumbnail)
+      Glide.with(itemView.context).load(highlight.hdThumbnail).into(thumbnail)
     } else if (!StringUtils.isNullOrEmpty(highlight.thumbnail)) {
-      Picasso.with(itemView.context).load(highlight.thumbnail).into(thumbnail)
+      Glide.with(itemView.context).load(highlight.thumbnail).into(thumbnail)
     } else {
-      Picasso.with(itemView.context).cancelRequest(thumbnail)
       thumbnail.setImageDrawable(null)
       thumbnailAvailable = false
     }
