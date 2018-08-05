@@ -19,8 +19,8 @@ android {
         applicationId "com.gmail.jorgegilcavazos.ballislife"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 76
-        versionName "1.2.5"
+        versionCode 77
+        versionName "1.2.6"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
@@ -30,7 +30,7 @@ android {
             testCoverageEnabled true
         }
         release {
-            minifyEnabled false
+            minifyEnabled falsek
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
