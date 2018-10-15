@@ -4,16 +4,18 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.24.4'
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.gmail.jorgegilcavazos.ballislife"
         minSdkVersion 19
@@ -94,7 +96,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.jakewharton:butterknife:8.7.0'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'net.dean.jraw:JRAW:0.9.0'
     implementation 'com.google.dagger:dagger:2.15'
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.2'
@@ -112,8 +114,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.9'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    kapt 'com.jakewharton:butterknife-compiler:8.7.0'
+    kapt 'com.google.dagger:dagger-compiler:2.15'
     testDebugImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
