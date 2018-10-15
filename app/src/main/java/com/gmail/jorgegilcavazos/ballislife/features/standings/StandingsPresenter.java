@@ -33,7 +33,7 @@ public class StandingsPresenter extends BasePresenter<StandingsView> {
         view.hideStandings();
 
         disposables.clear();
-        disposables.add(nbaStandingsService.getStandings("22016")
+        disposables.add(nbaStandingsService.getStandings("22018")
                 .subscribeOn(schedulerProvider.io())
                 .map(this::sortTeams)
                 .observeOn(schedulerProvider.ui())
