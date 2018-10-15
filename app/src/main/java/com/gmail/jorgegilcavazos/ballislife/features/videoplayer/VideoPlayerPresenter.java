@@ -1,10 +1,10 @@
 package com.gmail.jorgegilcavazos.ballislife.features.videoplayer;
 
+import com.crashlytics.android.Crashlytics;
 import com.gmail.jorgegilcavazos.ballislife.base.BasePresenter;
 import com.gmail.jorgegilcavazos.ballislife.data.service.StreamableService;
 import com.gmail.jorgegilcavazos.ballislife.features.model.Streamable;
 import com.gmail.jorgegilcavazos.ballislife.util.schedulers.BaseSchedulerProvider;
-import com.google.firebase.crash.FirebaseCrash;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -62,8 +62,8 @@ public class VideoPlayerPresenter extends BasePresenter<VideoPlayerView> {
     }
 
     public void onErrorPlayingVideo(Exception e) {
-        FirebaseCrash.log("Error playing video");
-        FirebaseCrash.report(e);
+        Crashlytics.log("Error playing video");
+        Crashlytics.logException(e);
         view.showCouldNotLoadVideoToast();
         view.finishActivity();
     }

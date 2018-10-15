@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArraySet;
 import android.util.Log;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class MuteGameService extends Service {
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(id);
         } else {
-            FirebaseCrash.report(new Exception("ID should not be -1 in MuteGameService.java"));
+            Crashlytics.logException(new Exception("ID should not be -1 in MuteGameService.java"));
         }
 
         Set<String> mutedGames = sharedPreferences.getStringSet(KEY_MUTE_GAMES, null);

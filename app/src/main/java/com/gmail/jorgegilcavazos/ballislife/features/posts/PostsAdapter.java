@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.data.reddit.RedditAuthentication;
 import com.gmail.jorgegilcavazos.ballislife.features.common.OnSubmissionClickListener;
@@ -18,7 +19,6 @@ import com.gmail.jorgegilcavazos.ballislife.features.model.SwishTheme;
 import com.gmail.jorgegilcavazos.ballislife.util.Pair;
 import com.gmail.jorgegilcavazos.ballislife.util.Utilities;
 import com.google.common.base.Optional;
-import com.google.firebase.crash.FirebaseCrash;
 
 import net.dean.jraw.models.Submission;
 
@@ -119,7 +119,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return VIEW_HEADER;
         }
         if (contentViewType == 0) {
-            FirebaseCrash.report(new IllegalArgumentException("contentViewType should not be 0"));
+            Crashlytics.logException(new IllegalArgumentException("contentViewType should not be 0"));
             return POSTS_VIEW_WIDE_CARD;
         }
         return contentViewType;

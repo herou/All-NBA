@@ -3,8 +3,8 @@ package com.gmail.jorgegilcavazos.ballislife.util;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Optional;
-import com.google.firebase.crash.FirebaseCrash;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -64,7 +64,7 @@ public final class DateFormatUtil {
         long daysAgo = (TimeUnit.MILLISECONDS.toDays(now.getTime() - date.getTime()));
 
         if (minutesAgo == 0) {
-            return new Pair<>(TIME_UNIT_JUST_NOW, Optional.<Long>absent());
+            return new Pair<>(TIME_UNIT_JUST_NOW, Optional.absent());
         } else if (minutesAgo < 60) {
             return new Pair<>(TIME_UNIT_MINUTES, Optional.of(minutesAgo));
         } else {
@@ -185,12 +185,12 @@ public final class DateFormatUtil {
             DateTime localized = timeET.toDateTime(DateTimeZone.forTimeZone(timeZone));
             return localized.toString(DateTimeFormat.forPattern("h:mm aa"));
         } catch (Exception e) {
-            FirebaseCrash.logcat(
+            Crashlytics.log(
                     Log.ERROR,
                     DateFormatUtil.class.getSimpleName(),
                     "Error localizing date " + dateETString
                             + " to timezone " + timeZone.toString());
-            FirebaseCrash.report(e);
+            Crashlytics.logException(e);
             return dateETString;
         }
     }

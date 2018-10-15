@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
+import com.crashlytics.android.Crashlytics
 import com.gmail.jorgegilcavazos.ballislife.R
 import com.gmail.jorgegilcavazos.ballislife.analytics.EventLogger
 import com.gmail.jorgegilcavazos.ballislife.analytics.GoPremiumOrigin
@@ -34,10 +35,9 @@ import com.gmail.jorgegilcavazos.ballislife.util.Constants
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubeStandalonePlayer
-import com.google.firebase.crash.FirebaseCrash
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.fragment_favorites.*
+import kotlinx.android.synthetic.main.fragment_favorites.recyclerView
 import javax.inject.Inject
 
 
@@ -60,6 +60,7 @@ class FavoritesFragment : Fragment(), FavoritesView {
   private val favoriteDeletions = PublishRelay.create<Highlight>()
 
   companion object {
+    private val TAG = FavoritesFragment::class.java.simpleName
     val LIST_STATE = "listState"
 
     fun newInstance() = FavoritesFragment()
@@ -186,7 +187,7 @@ class FavoritesFragment : Fragment(), FavoritesView {
     val intent = if (localRepository.openYouTubeInApp
         && YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(activity)
         == YouTubeInitializationResult.SUCCESS) {
-      FirebaseCrash.logcat(Log.INFO, "FavoritesFrag", "Opening youtube video in app: " + videoId)
+      Crashlytics.log(Log.INFO, TAG, "Opening youtube video in app: $videoId")
       YouTubeStandalonePlayer.createVideoIntent(
           activity,
           "AIzaSyA3jvG_4EIhAH_l3criaJx7-E_XWixOe78", /* API KEY */
@@ -196,8 +197,8 @@ class FavoritesFragment : Fragment(), FavoritesView {
           true /* Lightbox */
       )
     } else {
-      FirebaseCrash.logcat(Log.INFO, "HighlightsFrag", "Opening native youtube video" + videoId)
-      Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId))
+      Crashlytics.log(Log.INFO, TAG, "Opening native youtube video$videoId")
+      Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$videoId"))
     }
     startActivity(intent)
   }

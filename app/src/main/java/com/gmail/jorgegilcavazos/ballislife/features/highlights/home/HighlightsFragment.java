@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.analytics.EventLogger;
 import com.gmail.jorgegilcavazos.ballislife.analytics.GoPremiumOrigin;
@@ -44,7 +45,6 @@ import com.gmail.jorgegilcavazos.ballislife.util.schedulers.BaseSchedulerProvide
 import com.google.android.youtube.player.YouTubeApiServiceUtil;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -302,7 +302,7 @@ public class HighlightsFragment extends Fragment implements HighlightsView,
         if (localRepository.getOpenYouTubeInApp()
                 && YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getActivity())
                 .equals(YouTubeInitializationResult.SUCCESS)) {
-            FirebaseCrash.logcat(Log.INFO, "HighlightsFragment", "Opening youtube video in " +
+            Crashlytics.log(Log.INFO, "HighlightsFragment", "Opening youtube video in " +
                     "app: " + videoId);
             intent = YouTubeStandalonePlayer.createVideoIntent(getActivity(),
                     "AIzaSyA3jvG_4EIhAH_l3criaJx7-E_XWixOe78", /* API KEY */
@@ -310,7 +310,7 @@ public class HighlightsFragment extends Fragment implements HighlightsView,
                     true /* Autoplay */, true /* Lightbox */);
             startActivity(intent);
         } else {
-            FirebaseCrash.logcat(Log.INFO, "HighlightsFragment", "Opening youtube video in " +
+            Crashlytics.log(Log.INFO, "HighlightsFragment", "Opening youtube video in " +
                     "YouTube: " + videoId);
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
             startActivity(intent);

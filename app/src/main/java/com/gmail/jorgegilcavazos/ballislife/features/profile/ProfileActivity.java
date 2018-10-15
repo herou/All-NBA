@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.analytics.EventLogger;
 import com.gmail.jorgegilcavazos.ballislife.analytics.SwishScreen;
@@ -24,7 +25,6 @@ import com.gmail.jorgegilcavazos.ballislife.features.common.EndlessRecyclerViewS
 import com.gmail.jorgegilcavazos.ballislife.features.main.BaseNoActionBarActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.submission.SubmissionActivity;
 import com.gmail.jorgegilcavazos.ballislife.util.Constants;
-import com.google.firebase.crash.FirebaseCrash;
 
 import net.dean.jraw.models.Contribution;
 import net.dean.jraw.paginators.Sorting;
@@ -244,7 +244,7 @@ public class ProfileActivity extends BaseNoActionBarActivity
 
     @Override
     public void showUnknownErrorToast(Throwable e) {
-        FirebaseCrash.report(e);
+        Crashlytics.logException(e);
         Toast.makeText(this, R.string.unknown_error, Toast.LENGTH_SHORT).show();
     }
 }
