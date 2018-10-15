@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 
 public interface RedditGameThreadsService {
 
-    @GET("game_threads/2017-18/.json")
+    @GET("game_threads/2018-19/.json")
     Single<Map<String, GameThreadSummary>> fetchGameThreads(
             @Query("orderBy") String orderBy,
             @Query("startAt") long startAt,

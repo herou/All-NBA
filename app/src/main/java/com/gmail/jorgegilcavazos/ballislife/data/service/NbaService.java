@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface NbaService {
-    @GET("data/10s/v2015/json/mobile_teams/nba/2017/scores/gamedetail/{gameId}_gamedetail.json")
+    @GET("data/10s/v2015/json/mobile_teams/nba/2018/scores/gamedetail/{gameId}_gamedetail.json")
     Single<BoxScoreResponse> boxScoreNba(@Path("gameId") String gameId);
 }

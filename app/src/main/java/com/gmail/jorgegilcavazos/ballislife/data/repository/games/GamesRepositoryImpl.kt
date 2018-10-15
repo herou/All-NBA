@@ -128,7 +128,7 @@ class GamesRepositoryImpl @Inject constructor(
             DateFormatUtil.getDateEndUtc(date))
         .subscribeOn(schedulerProvider.io())
         .flatMap { map ->
-          val matchUpsRef = db.collection("playoff_picture").document("2018").collection("1")
+          val matchUpsRef = db.collection("playoff_picture").document("2019").collection("1")
           matchUpsRef.getSingle<MatchUp>()
               .subscribeOn(schedulerProvider.ui())
               .observeOn(schedulerProvider.ui())
@@ -142,9 +142,8 @@ class GamesRepositoryImpl @Inject constructor(
             val team2 = game.awayTeamAbbr
 
             matchUps.firstOrNull { matchUp ->
-              (matchUp.team1 == team1 || matchUp.team1 == team2)
-                  && (matchUp.team2 == team1 || matchUp.team2 == team2)
-            }?.let { matchUp ->
+              (matchUp.team1 == team1 || matchUp.team1 == team2) && (matchUp.team2 == team1 || matchUp.team2 == team2)
+            }.let { matchUp ->
               game.seriesSummary = when {
                 matchUp.team1_wins == 4 -> {
                   "${matchUp.team1} wins ${matchUp.team1_wins}-${matchUp.team2_wins}"

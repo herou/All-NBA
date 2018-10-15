@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface NbaGamesService {
 
-    @GET("games/2017-18/.json")
+    @GET("games/2018-19/.json")
     Single<Map<String, GameV2>> getDayGames(
             @Query("orderBy") String orderBy,
             @Query("startAt") long startAt, @Query("endAt") long endAt);
