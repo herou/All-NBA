@@ -62,7 +62,7 @@ class GamesHomeFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         .subscribe { setAdVisibility() }
         .addTo(disposable)
 
-    adapter = GamesHomePagerAdapter(activity, childFragmentManager)
+    adapter = GamesHomePagerAdapter(requireActivity(), childFragmentManager)
     viewPager.adapter = adapter
     viewPager.currentItem = adapter.count / 2
 
@@ -100,7 +100,7 @@ class GamesHomeFragment : Fragment(), DatePickerDialog.OnDateSetListener {
   override fun onResume() {
     super.onResume()
     setNavigatorText()
-    eventLogger.setCurrentScreen(activity, SwishScreen.GAMES)
+    eventLogger.setCurrentScreen(requireActivity(), SwishScreen.GAMES)
   }
 
   override fun onDestroyView() {

@@ -143,7 +143,7 @@ class GamesRepositoryImpl @Inject constructor(
 
             matchUps.firstOrNull { matchUp ->
               (matchUp.team1 == team1 || matchUp.team1 == team2) && (matchUp.team2 == team1 || matchUp.team2 == team2)
-            }.let { matchUp ->
+            }?.let { matchUp ->
               game.seriesSummary = when {
                 matchUp.team1_wins == 4 -> {
                   "${matchUp.team1} wins ${matchUp.team1_wins}-${matchUp.team2_wins}"
