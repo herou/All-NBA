@@ -37,7 +37,18 @@ data class SubmissionWrapper(val id: String,
     score = submission?.score ?: 0
     commentCount = submission?.commentCount ?: 0
     thumbnail = submission?.thumbnail
-    highResThumbnail = submission?.oEmbedMedia?.thumbnail?.url?.toString() ?: ""
+
+    highResThumbnail = try {
+      submission?.oEmbedMedia?.thumbnail?.url?.toString() ?: ""
+    } catch (e: NullPointerException) {
+      // Method getOEmbedMedia() and getThumbnail() methods in JRAW make incorrected assumptions
+      // about nullability in of some fields and can throw NPEs.
+      // See: https://github.com/mattbdean/JRAW/issues/198
+      // If we catch a NPE just set the highResThumbnail to empty.
+      // TODO(jorge): See if this has been fixed in JRAW 1.0+
+      ""
+    }
+
     voteDirection = submission?.vote
     isSaved = submission?.isSaved == true
     selfTextHtml = submission?.data("selftext_html")
