@@ -131,6 +131,7 @@ class GamesRepositoryImpl @Inject constructor(
             DateFormatUtil.getDateStartUtc(date),
             DateFormatUtil.getDateEndUtc(date))
         .map { it.filterNot { it.value.periodStatus == "TBD" } }
+        /*
         .flatMap { map ->
           val matchUpsRef = firestore.collection("playoff_picture").document("2019").collection("1")
           matchUpsRef.getSingle<MatchUp>()
@@ -168,6 +169,7 @@ class GamesRepositoryImpl @Inject constructor(
           }
           Single.just(map)
         }
+        */
         .doOnSuccess { gamesMap.putAll(it) }
 
   }
