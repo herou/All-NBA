@@ -1,6 +1,6 @@
 # Swish Android App
 [![Build Status](https://travis-ci.org/jorgegil96/All-NBA.svg?branch=master)](https://travis-ci.org/jorgegil96/All-NBA)
-[![Release status](https://img.shields.io/badge/release-v1.3.0-blue.svg)](https://github.com/jorgegil96/All-NBA/releases)
+[![Release status](https://img.shields.io/badge/release-v1.3.1-blue.svg)](https://github.com/jorgegil96/All-NBA/releases)
 [![codecov](https://codecov.io/gh/jorgegil96/All-NBA/branch/master/graph/badge.svg)](https://codecov.io/gh/jorgegil96/All-NBA)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/jorgegil96/All-NBA/issues)
 [![Join the chat at https://gitter.im/All-NBA-Android](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/All-NBA-Android)
