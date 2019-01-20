@@ -51,10 +51,6 @@ class GameSummaryUIView(parent: ViewGroup) {
 
   fun getUiEvents(): Observable<GameSummaryUiEvent> = uiEvents
 
-  fun setLoadingIndicator(visible: Boolean) {
-
-  }
-
   fun setHomeTeamInfo(team: Team) {
     val logoRes = view.context.resources.getIdentifier(
         team.key.toLowerCase(),

@@ -2,7 +2,6 @@ package com.gmail.jorgegilcavazos.ballislife.features.gamedetail
 
 import android.view.ViewGroup
 import com.gmail.jorgegilcavazos.ballislife.common.ErrorType
-import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.GameLoading
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.GameUpdated
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameStatus
@@ -32,7 +31,6 @@ class GameSummaryComponent(
 
     events
         .subscribe { event ->
-          uiView.setLoadingIndicator(visible = event == GameLoading)
           when (event) {
             is GameUpdated -> {
               val game = event.game
