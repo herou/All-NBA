@@ -59,7 +59,7 @@ class GameSummaryUIView(parent: ViewGroup) {
         view.context.packageName
     )
     homeLogo.setImageResource(logoRes)
-    homeName.text = team.nickName
+    homeName.text = team.key
   }
 
   fun setVisitorTeamInfo(team: Team) {
@@ -69,7 +69,7 @@ class GameSummaryUIView(parent: ViewGroup) {
         view.context.packageName
     )
     visitorLogo.setImageResource(logoRes)
-    visitorName.text = team.nickName
+    visitorName.text = team.key
   }
 
   fun setGameState(gameState: GameState) {
