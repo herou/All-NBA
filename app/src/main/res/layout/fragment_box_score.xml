@@ -5,125 +5,131 @@
     android:layout_height="match_parent"
     android:background="?attr/boxScoreBackground">
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/box_score_ad_banner_id"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_horizontal"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button_away"
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="?attr/boxScoreSquareWhite"
-                android:text="SAS - 81"/>
+                android:layout_height="wrap_content"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/box_score_ad_banner_id"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center_horizontal"/>
 
-            <Button
-                android:id="@+id/button_home"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="?attr/boxScoreSquareBlack"
-                android:text="ATL (67)"
-                android:textColor="@color/white"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <Button
+                    android:id="@+id/button_away"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="?attr/boxScoreSquareWhite"
+                    android:text="SAS - 81"/>
+
+                <Button
+                    android:id="@+id/button_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="?attr/boxScoreSquareBlack"
+                    android:text="ATL (67)"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ScrollView
+                    android:id="@+id/scrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="56dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:id="@+id/playerContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TableLayout
+                                android:id="@+id/playersTable"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:scrollbars="none">
+                            </TableLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/playerContainer">
+
+                            <HorizontalScrollView
+                                android:id="@+id/horizontalScrollView1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:scrollbars="none">
+
+                                <TableLayout
+                                    android:id="@+id/statsTable"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scrollbarAlwaysDrawHorizontalTrack="false"
+                                    android:scrollbars="none">
+
+                                </TableLayout>
+
+                            </HorizontalScrollView>
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                </ScrollView>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:id="@+id/text_load_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/box_score_not_available"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:layout_marginBottom="56dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RelativeLayout
-                        android:id="@+id/playerContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TableLayout
-                            android:id="@+id/playersTable"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:scrollbars="none">
-                        </TableLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/playerContainer">
-
-                        <HorizontalScrollView
-                            android:id="@+id/horizontalScrollView1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:scrollbars="none">
-
-                            <TableLayout
-                                android:id="@+id/statsTable"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scrollbarAlwaysDrawHorizontalTrack="false"
-                                android:scrollbars="none">
-
-                            </TableLayout>
-
-                        </HorizontalScrollView>
-
-                    </RelativeLayout>
-
-                </RelativeLayout>
-
-            </ScrollView>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
-
-            <TextView
-                android:id="@+id/text_load_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/box_score_not_available"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:visibility="gone"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </FrameLayout>
 
