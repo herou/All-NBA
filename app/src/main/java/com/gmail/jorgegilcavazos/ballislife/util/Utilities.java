@@ -14,9 +14,9 @@ public final class Utilities {
         int period = Integer.parseInt(periodValue);
         int overtimePeriod = period - 4;
         if (period <= 4) {
-            return period + " " + periodName;
+            return "Q" + period;
         } else {
-            return overtimePeriod + "OT";
+            return "OT" + overtimePeriod;
         }
     }
 
