@@ -19,4 +19,7 @@ public interface NbaGamesService {
 
     @GET("boxscore/{gameId}/.json")
     Single<BoxScoreResponse> boxScore(@Path("gameId") String gameId);
+
+    @GET("games/2018-19/{gameId}/.json")
+    Single<GameV2> getGame(@Path("gameId") String gameId);
 }

@@ -6,10 +6,12 @@ import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.gmail.jorgegilcavazos.ballislife.BuildConfig;
+import com.gmail.jorgegilcavazos.ballislife.crashreporting.CrashlyticsTree;
 import com.gmail.jorgegilcavazos.ballislife.dagger.component.AppComponent;
 import com.gmail.jorgegilcavazos.ballislife.dagger.component.DaggerAppComponent;
 import com.gmail.jorgegilcavazos.ballislife.dagger.module.AppModule;
 import com.gmail.jorgegilcavazos.ballislife.dagger.module.DataModule;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -37,6 +39,7 @@ public class BallIsLifeApplication extends Application {
         context = getApplicationContext();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+        FirebaseApp.initializeApp(context);
         firebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
@@ -50,6 +53,8 @@ public class BallIsLifeApplication extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+        } else {
+            Timber.plant(new CrashlyticsTree());
         }
 
         appComponent = DaggerAppComponent.builder()

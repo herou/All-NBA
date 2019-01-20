@@ -60,10 +60,6 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 import static android.app.Activity.RESULT_OK;
-import static com.gmail.jorgegilcavazos.ballislife.features.gamethread.CommentsActivity
-        .AWAY_TEAM_KEY;
-import static com.gmail.jorgegilcavazos.ballislife.features.gamethread.CommentsActivity
-        .HOME_TEAM_KEY;
 
 public class GameThreadFragment extends Fragment implements GameThreadView, SwipeRefreshLayout
         .OnRefreshListener, CompoundButton.OnCheckedChangeListener, RewardedVideoAdListener {
@@ -126,8 +122,8 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            homeTeam = getArguments().getString(HOME_TEAM_KEY);
-            awayTeam = getArguments().getString(AWAY_TEAM_KEY);
+            homeTeam = getArguments().getString(CommentsActivity.HOME_TEAM_KEY);
+            awayTeam = getArguments().getString(CommentsActivity.AWAY_TEAM_KEY);
             threadType = (GameThreadType) getArguments().getSerializable(THREAD_TYPE_KEY);
             gameId = getArguments().getString(CommentsActivity.GAME_ID_KEY);
             gameDate = getArguments().getLong(GAME_DATE_KEY);
@@ -160,9 +156,9 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) {
-                    ((CommentsActivity) getActivity()).fab.hide();
+                    ((CommentsActivity) getActivity()).getFab().hide();
                 } else if (dy < 0) {
-                    ((CommentsActivity) getActivity()).fab.show();
+                    ((CommentsActivity) getActivity()).getFab().show();
                 }
             }
         });

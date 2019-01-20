@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConstraintLayoutStates xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <State
+        android:id="@+id/pre"
+        app:constraints="@layout/game_detail_game_status_pre"/>
+    <State
+        android:id="@+id/live"
+        app:constraints="@layout/game_detail_game_status_live"/>
+    <State
+        android:id="@+id/post"
+        app:constraints="@layout/game_detail_game_status_post"/>
+</ConstraintLayoutStates>

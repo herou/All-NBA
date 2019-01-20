@@ -46,10 +46,6 @@ import butterknife.Unbinder;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.gmail.jorgegilcavazos.ballislife.features.gamethread.CommentsActivity
-        .AWAY_TEAM_KEY;
-import static com.gmail.jorgegilcavazos.ballislife.features.gamethread.CommentsActivity
-        .HOME_TEAM_KEY;
 
 
 public class BoxScoreFragment extends Fragment implements BoxScoreView {
@@ -82,8 +78,8 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
         BallIsLifeApplication.getAppComponent().inject(this);
 
         if (getArguments() != null) {
-            homeTeam = getArguments().getString(HOME_TEAM_KEY);
-            awayTeam = getArguments().getString(AWAY_TEAM_KEY);
+            homeTeam = getArguments().getString(CommentsActivity.HOME_TEAM_KEY);
+            awayTeam = getArguments().getString(CommentsActivity.AWAY_TEAM_KEY);
             gameId = getArguments().getString(CommentsActivity.GAME_ID_KEY);
         }
     }
