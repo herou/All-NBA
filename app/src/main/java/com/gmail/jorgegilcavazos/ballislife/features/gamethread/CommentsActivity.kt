@@ -2,8 +2,7 @@ package com.gmail.jorgegilcavazos.ballislife.features.gamethread
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.TabLayout
-import android.support.v4.view.ViewPager
+import android.support.v4.view.ViewPager.OnPageChangeListener
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,8 +17,10 @@ import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryCompo
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent
 import com.gmail.jorgegilcavazos.ballislife.features.games.GamesFragment
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.BOX_SCORE_TAB
+import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.GAME_THREAD_TAB
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.POST_GAME_TAB
 import com.gmail.jorgegilcavazos.ballislife.features.main.BaseNoActionBarActivity
+import com.gmail.jorgegilcavazos.ballislife.features.model.GameStatus
 import com.gmail.jorgegilcavazos.ballislife.features.model.NbaGame
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team
 import com.jakewharton.rxrelay2.PublishRelay
@@ -34,8 +35,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 
-class CommentsActivity : BaseNoActionBarActivity(), TabLayout.OnTabSelectedListener,
-    ViewPager.OnPageChangeListener, View.OnClickListener {
+class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
 
   @Inject lateinit var eventLogger: EventLogger
   @Inject lateinit var gameUpdatesInteractor: GameUpdatesInteractor
@@ -73,18 +73,25 @@ class CommentsActivity : BaseNoActionBarActivity(), TabLayout.OnTabSelectedListe
     bundle.putString(GAME_ID_KEY, gameId)
     bundle.putLong(GameThreadFragment.GAME_DATE_KEY, date)
 
-    // Initialize tab layout and add three tabs.
-    tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
-    tabLayout!!.addTab(tabLayout!!.newTab().setText(R.string.game_thread))
-    tabLayout!!.addTab(tabLayout!!.newTab().setText(R.string.box_score))
-    tabLayout!!.addTab(tabLayout!!.newTab().setText(R.string.post_game_thread))
-    fab!!.hide()
+    fab.hide()
 
-    pagerAdapter = PagerAdapter(supportFragmentManager, tabLayout!!.tabCount, bundle)
-    pager!!.adapter = pagerAdapter
-    pager!!.offscreenPageLimit = 2
-    pager!!.addOnPageChangeListener(this)
-    tabLayout!!.addOnTabSelectedListener(this)
+    pagerAdapter = PagerAdapter(this, supportFragmentManager, bundle)
+    pager.adapter = pagerAdapter
+    pager.offscreenPageLimit = 2
+    tabLayout.setupWithViewPager(pager)
+    pager.addOnPageChangeListener(object : OnPageChangeListener {
+      override fun onPageScrollStateChanged(state: Int) {
+      }
+
+      override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+      }
+
+      override fun onPageSelected(position: Int) {
+        if (position == BOX_SCORE_TAB) {
+          fab.hide()
+        }
+      }
+    })
 
     setSelectedTab(intent.getStringExtra(GamesFragment.GAME_STATUS))
 
@@ -153,24 +160,6 @@ class CommentsActivity : BaseNoActionBarActivity(), TabLayout.OnTabSelectedListe
     return super.onOptionsItemSelected(item)
   }
 
-  override fun onTabSelected(tab: TabLayout.Tab) {
-    pager.currentItem = tab.position
-    when (tab.position) {
-      1 -> {
-        fab!!.hide()
-        expandToolbar()
-      }
-    }
-  }
-
-  override fun onTabUnselected(tab: TabLayout.Tab) {
-
-  }
-
-  override fun onTabReselected(tab: TabLayout.Tab) {
-
-  }
-
   override fun onClick(v: View) {
     when (v.id) {
       R.id.fab -> addComment()
@@ -187,14 +176,6 @@ class CommentsActivity : BaseNoActionBarActivity(), TabLayout.OnTabSelectedListe
     }
   }
 
-  private fun expandToolbar() {
-    /*
-    if (toolbar!!.parent is AppBarLayout) {
-      (toolbar!!.parent as AppBarLayout).setExpanded(true, true)
-    }
-    */
-  }
-
   fun getFab(): FloatingActionButton = fab
 
   fun showFab() {
@@ -207,39 +188,11 @@ class CommentsActivity : BaseNoActionBarActivity(), TabLayout.OnTabSelectedListe
     fab.hide()
   }
 
-  override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-  }
-
-  override fun onPageSelected(position: Int) {
-    tabLayout!!.setScrollPosition(position, 0f, true)
-    when (position) {
-      1 -> {
-        fab!!.hide()
-        //expandToolbar()
-      }
-    }
-  }
-
-  override fun onPageScrollStateChanged(state: Int) {
-
-  }
-
   private fun setSelectedTab(gameStatus: String) {
-    if (localRepository.openBoxScoreByDefault) {
-      val boxScoreTab = tabLayout!!.getTabAt(BOX_SCORE_TAB)
-      if (boxScoreTab != null) {
-        boxScoreTab.select()
-      } else {
-        pager.currentItem = BOX_SCORE_TAB
-      }
-    } else if (gameStatus == NbaGame.POST_GAME) {
-      val postGameTab = tabLayout!!.getTabAt(POST_GAME_TAB)
-      if (postGameTab != null) {
-        postGameTab.select()
-      } else {
-        pager.currentItem = POST_GAME_TAB
-      }
+    when {
+      localRepository.openBoxScoreByDefault -> pager.currentItem = BOX_SCORE_TAB
+      gameStatus == GameStatus.POST.code -> pager.currentItem = POST_GAME_TAB
+      else -> pager.currentItem = GAME_THREAD_TAB
     }
   }
 

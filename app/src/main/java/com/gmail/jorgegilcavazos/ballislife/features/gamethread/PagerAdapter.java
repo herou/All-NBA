@@ -1,10 +1,13 @@
 package com.gmail.jorgegilcavazos.ballislife.features.gamethread;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.features.boxscore.BoxScoreFragment;
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameThreadType;
 
@@ -16,20 +19,18 @@ import java.util.Map;
  */
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    private int numOfTabs;
-    private Bundle bundle;
-    private Map<Integer, Fragment> fragmentMap;
+    private final Context context;
+    private final Bundle bundle;
+    private final Map<Integer, Fragment> fragmentMap = new HashMap<>();
 
-    public static final int GAME_THREAD_TAB = 0;
-    public static final int BOX_SCORE_TAB = 1;
-    public static final int POST_GAME_TAB = 2;
+    static final int GAME_THREAD_TAB = 0;
+    static final int BOX_SCORE_TAB = 1;
+    static final int POST_GAME_TAB = 2;
 
-    public PagerAdapter(FragmentManager fragmentManager, int numOfTabs, Bundle bundle) {
+    public PagerAdapter(Context context, FragmentManager fragmentManager, Bundle bundle) {
         super(fragmentManager);
-        this.numOfTabs = numOfTabs;
+        this.context = context;
         this.bundle = bundle;
-
-        fragmentMap = new HashMap<>();
     }
 
     @Override
@@ -69,6 +70,21 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return numOfTabs;
+        return 3;
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case GAME_THREAD_TAB:
+                return context.getString(R.string.game_thread);
+            case BOX_SCORE_TAB:
+                return context.getString(R.string.box_score);
+            case POST_GAME_TAB:
+                return context.getString(R.string.post_game_thread);
+        }
+
+        throw new IllegalArgumentException("Position exceeded support tabs: " + position);
     }
 }
