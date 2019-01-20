@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:layout_margin="4dp"
-        android:background="?selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_arrow_back_black_24dp"
         android:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
