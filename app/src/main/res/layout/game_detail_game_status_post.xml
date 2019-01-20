@@ -77,6 +77,18 @@
         app:layout_constraintTop_toBottomOf="@id/separator"/>
 
     <TextView
+        android:id="@+id/halftime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator"
+        android:layout_margin="4dp"
+        android:text="@string/game_detail_halftime"
+        android:visibility="gone"/>
+
+    <TextView
         android:id="@+id/clock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

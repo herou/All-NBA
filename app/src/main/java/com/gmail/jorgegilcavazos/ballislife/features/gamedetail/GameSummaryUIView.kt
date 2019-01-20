@@ -38,6 +38,7 @@ class GameSummaryUIView(parent: ViewGroup) {
   private val period: TextView = gameStatus.findViewById(R.id.period)
   private val startTime: TextView = gameStatus.findViewById(R.id.startTime)
   private val broadcaster: TextView = gameStatus.findViewById(R.id.broadcaster)
+  private val halftimeText: TextView = gameStatus.findViewById(R.id.halftime)
 
   private val uiEvents = PublishRelay.create<GameSummaryUiEvent>()
 
@@ -88,12 +89,24 @@ class GameSummaryUIView(parent: ViewGroup) {
     visitorScore.text = score
   }
 
+  fun setClockVisibility(visible: Boolean) {
+    clock.visibility = if (visible) View.VISIBLE else View.GONE
+  }
+
   fun setClock(clock: String) {
     this.clock.text = clock
   }
 
+  fun setPeriodVisibility(visible: Boolean) {
+    period.visibility = if (visible) View.VISIBLE else View.GONE
+  }
+
   fun setPeriod(period: String) {
     this.period.text = period
+  }
+
+  fun setHalftimeVisibility(visible: Boolean) {
+    halftimeText.visibility = if (visible) View.VISIBLE else View.GONE
   }
 
   fun setStartTime(startTime: String) {

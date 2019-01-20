@@ -29,7 +29,7 @@ class GameSummaryComponent(
     uiView.setHomeTeamInfo(homeTeam)
     uiView.setVisitorTeamInfo(visitorTeam)
 
-    events
+    val disposable = events
         .subscribe { event ->
           when (event) {
             is GameUpdated -> {
@@ -49,11 +49,20 @@ class GameSummaryComponent(
                 LIVE -> {
                   uiView.setGameState(GameState.LIVE)
 
-                  // TODO: halftime
                   uiView.setHomeScore(game.homeTeamScore)
                   uiView.setVisitorScore(game.awayTeamScore)
                   uiView.setClock(game.gameClock)
                   uiView.setPeriod(Utilities.getPeriodString(game.periodValue, game.periodName))
+
+                  if (game.periodStatus == HALFTIME_PERIOD_STATUS) {
+                    uiView.setHalftimeVisibility(true)
+                    uiView.setClockVisibility(false)
+                    uiView.setPeriodVisibility(false)
+                  } else {
+                    uiView.setHalftimeVisibility(false)
+                    uiView.setClockVisibility(true)
+                    uiView.setPeriodVisibility(true)
+                  }
                 }
                 POST -> {
                   uiView.setGameState(GameState.POST)
@@ -100,5 +109,9 @@ class GameSummaryComponent(
     object GameLoading : Event()
     data class GameUpdated(val game: GameV2) : Event()
     data class GameUpdateFailed(val e: ErrorType) : Event()
+  }
+
+  companion object {
+    private const val HALFTIME_PERIOD_STATUS = "Halftime"
   }
 }
