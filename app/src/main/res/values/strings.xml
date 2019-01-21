@@ -591,7 +591,8 @@
     <string name="unknown_source">Unknown source</string>
     <string name="something_went_wrong">%1$d Something went wrong</string>
     <string name="your_device_is_offline">Your device is offline</string>
-    <string name="no_thread_has_been_made_for_this_game">No thread has been made for this game</string>
+    <string name="no_thread_has_been_made_for_this_game">Looks like you\'re here early, comments
+        will appear soon...</string>
     <string name="error_loading_comments">Error loading comments: %1$d</string>
     <string name="no_comments_have_been_made">No comments have been made</string>
     <string name="unsaving">Unsaving</string>
