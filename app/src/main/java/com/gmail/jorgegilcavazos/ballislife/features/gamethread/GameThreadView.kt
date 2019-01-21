@@ -17,8 +17,6 @@ interface GameThreadView {
 
   fun getGameTimeUtc(): Long
 
-  fun isPremiumPurchased(): Boolean
-
   fun setLoadingIndicator(active: Boolean)
 
   fun showComments(comments: List<ThreadItem>)
@@ -83,8 +81,6 @@ interface GameThreadView {
 
   fun hideFab()
 
-  fun purchasePremium()
-
   fun commentCollapses(): Observable<String>
 
   fun commentUnCollapses(): Observable<String>
@@ -94,8 +90,4 @@ interface GameThreadView {
   fun uncollapseComments(id: String)
 
   fun getCommentDelay(): CommentDelay
-
-  fun setCommentDelay(delay: CommentDelay)
-
-  fun gameId(): String
 }

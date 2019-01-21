@@ -9,23 +9,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.analytics.EventLogger;
-import com.gmail.jorgegilcavazos.ballislife.analytics.GoPremiumOrigin;
-import com.gmail.jorgegilcavazos.ballislife.analytics.SwishEvent;
-import com.gmail.jorgegilcavazos.ballislife.analytics.SwishEventParam;
 import com.gmail.jorgegilcavazos.ballislife.data.local.LocalRepository;
 import com.gmail.jorgegilcavazos.ballislife.data.premium.PremiumService;
 import com.gmail.jorgegilcavazos.ballislife.features.application.BallIsLifeApplication;
 import com.gmail.jorgegilcavazos.ballislife.features.common.ThreadAdapter;
-import com.gmail.jorgegilcavazos.ballislife.features.gopremium.GoPremiumActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentDelay;
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentWrapper;
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameThreadType;
@@ -80,7 +74,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView,
     private GameThreadType threadType;
     private String gameId;
     private long gameDate;
-    private CommentDelay selectedCommentDelay = CommentDelay.NONE;
 
     public GameThreadFragment() {
         // Required empty public constructor.
@@ -194,19 +187,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView,
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                presenter.loadGameThread(localRepository.isGameThreadStreamingEnabled());
-                return true;
-            case R.id.action_add_delay:
-                showAddDelayDialog();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onRefresh() {
         presenter.loadGameThread(localRepository.isGameThreadStreamingEnabled());
     }
@@ -232,11 +212,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView,
     @Override
     public long getGameTimeUtc() {
         return gameDate;
-    }
-
-    @Override
-    public boolean isPremiumPurchased() {
-        return premiumService.isPremium();
     }
 
     @Override
@@ -427,12 +402,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView,
         fabClicks.onNext(new Object());
     }
 
-    @Override
-    public void purchasePremium() {
-        Intent intent = new Intent(getActivity(), GoPremiumActivity.class);
-        startActivity(intent);
-    }
-
     @NotNull
     @Override
     public Observable<String> commentCollapses() {
@@ -458,102 +427,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView,
     @NotNull
     @Override
     public CommentDelay getCommentDelay() {
-        return selectedCommentDelay;
-    }
-
-    @Override
-    public void setCommentDelay(@NotNull CommentDelay delay) {
-        selectedCommentDelay = delay;
-    }
-
-    @NotNull
-    @Override
-    public String gameId() {
-        return gameId;
-    }
-
-    private void showAddDelayDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.worried_about_spoilers)
-                .content(getString(R.string.add_a_delay_to_these_comments))
-                .items(R.array.add_delay_options)
-                .itemsCallbackSingleChoice(getIndexOfCommentDelay(selectedCommentDelay),
-                        (dialog, itemView, which, text) -> {
-                            if (!isPremiumPurchased()
-                                    && !localRepository.isGameStreamUnlocked(gameId)) {
-                                Bundle params = new Bundle();
-                                params.putString(SwishEventParam.GO_PREMIUM_ORIGIN.getKey(),
-                                        GoPremiumOrigin.GAME_THREAD_DELAY.getOriginName());
-                                eventLogger.logEvent(SwishEvent.GO_PREMIUM, params);
-
-                                purchasePremium();
-                                selectedCommentDelay = CommentDelay.NONE;
-                                return true;
-                            }
-
-                            switch (which) {
-                                case 1:
-                                    selectedCommentDelay = CommentDelay.FIVE;
-                                    break;
-                                case 2:
-                                    selectedCommentDelay = CommentDelay.TEN;
-                                    break;
-                                case 3:
-                                    selectedCommentDelay = CommentDelay.TWENTY;
-                                    break;
-                                case 4:
-                                    selectedCommentDelay = CommentDelay.THIRTY;
-                                    break;
-                                case 5:
-                                    selectedCommentDelay = CommentDelay.MINUTE;
-                                    break;
-                                case 6:
-                                    selectedCommentDelay = CommentDelay.TWO_MINUTES;
-                                    break;
-                                case 7:
-                                    selectedCommentDelay = CommentDelay.FIVE_MINUTES;
-                                    break;
-                                default:
-                                    selectedCommentDelay = CommentDelay.NONE;
-                                    break;
-                            }
-                            // TODO: enable streaming..
-                            //streamSwitch.setChecked(true);
-
-
-                            Bundle params = new Bundle();
-                            params.putInt(SwishEventParam.DELAY_TIME_SECONDS.getKey(),
-                                    selectedCommentDelay.getSeconds());
-                            eventLogger.logEvent(SwishEvent.DELAY_COMMENTS, params);
-
-                            return true;
-                })
-                .positiveText(getString(R.string.add_delay))
-                .negativeText(getString(R.string.cancel))
-                .show();
-    }
-
-    private int getIndexOfCommentDelay(CommentDelay commentDelay) {
-        if (!isPremiumPurchased()) {
-            return 0;
-        }
-        switch (commentDelay) {
-            case FIVE:
-                return 1;
-            case TEN:
-                return 2;
-            case TWENTY:
-                return 3;
-            case THIRTY:
-                return 4;
-            case MINUTE:
-                return 5;
-            case TWO_MINUTES:
-                return 6;
-            case FIVE_MINUTES:
-                return 7;
-            default:
-                return 0;
-        }
+        return ((CommentsActivity) getActivity()).getCommentDelay();
     }
 }

@@ -10,10 +10,10 @@ import com.gmail.jorgegilcavazos.ballislife.data.repository.comments.Contributio
 import com.gmail.jorgegilcavazos.ballislife.data.repository.gamethreads.GameThreadsRepository
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus.StreamMode.OFF
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus.StreamMode.ON
-import com.gmail.jorgegilcavazos.ballislife.features.model.CommentDelay.NONE
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentItem
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentWrapper
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameThreadType
+import com.gmail.jorgegilcavazos.ballislife.features.model.GameThreadType.LIVE
 import com.gmail.jorgegilcavazos.ballislife.features.model.ThreadItem
 import com.gmail.jorgegilcavazos.ballislife.features.model.ThreadItemType.COMMENT
 import com.gmail.jorgegilcavazos.ballislife.util.ErrorHandler
@@ -122,10 +122,7 @@ class GameThreadPresenterV2 @Inject constructor(
         .subscribe { streamMode ->
           when (streamMode) {
             ON -> loadGameThread(repeating = true)
-            OFF -> {
-              loadGameThread(repeating = false)
-              view.setCommentDelay(NONE)
-            }
+            OFF -> loadGameThread(repeating = false)
           }
         }.addTo(disposable)
 
@@ -151,7 +148,7 @@ class GameThreadPresenterV2 @Inject constructor(
   }
 
   fun loadGameThread(repeating: Boolean) {
-    val gameThreadsObs = if (repeating) {
+    val gameThreadsObs = if (repeating && view.getThreadType() == LIVE) {
       gameThreadsRepository.gameThreads(home, visitor, gameTimeUtc, type)
           .repeatWhen { obs -> obs.delay(10, TimeUnit.SECONDS) }
     } else {

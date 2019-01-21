@@ -21,6 +21,7 @@ import com.gmail.jorgegilcavazos.ballislife.features.application.BallIsLifeAppli
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.BackPressed
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.DelayPressed
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamChecked
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamUnchecked
 import com.gmail.jorgegilcavazos.ballislife.features.games.GamesFragment
@@ -31,6 +32,8 @@ import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus.StreamMode.ON
 import com.gmail.jorgegilcavazos.ballislife.features.gopremium.GoPremiumActivity
 import com.gmail.jorgegilcavazos.ballislife.features.main.BaseNoActionBarActivity
+import com.gmail.jorgegilcavazos.ballislife.features.model.CommentDelay
+import com.gmail.jorgegilcavazos.ballislife.features.model.CommentDelay.NONE
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameStatus
 import com.gmail.jorgegilcavazos.ballislife.features.model.NbaGame
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team
@@ -67,6 +70,8 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
 
   private lateinit var pagerAdapter: PagerAdapter
   private lateinit var rewardedVideoAd: RewardedVideoAd
+
+  private var selectedCommentDelay = CommentDelay.NONE
 
   private val gameSummaryEvents = PublishRelay.create<GameSummaryComponent.Event>()
   private lateinit var gameSummaryComponent: GameSummaryComponent
@@ -117,7 +122,9 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
     pager.addOnPageChangeListener(object : OnPageChangeListener {
       override fun onPageScrollStateChanged(state: Int) {}
       override fun onPageScrolled(position: Int, offset: Float, OffsetPixels: Int) {}
-      override fun onPageSelected(position: Int) { if (position == BOX_SCORE_TAB) fab.hide() }
+      override fun onPageSelected(position: Int) {
+        if (position == BOX_SCORE_TAB) fab.hide()
+      }
     })
 
     setSelectedTab(intent.getStringExtra(GamesFragment.GAME_STATUS))
@@ -154,10 +161,11 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
               }
             }
             StreamUnchecked -> {
-              // TODO: set comment delay to NONE
               localRepository.isGameThreadStreamingEnabled = false
+              selectedCommentDelay = NONE
               streamChangesBus.notifyChanged(OFF)
             }
+            DelayPressed -> showAddDelayDialog()
           }
         }
         .addTo(disposables)
@@ -220,6 +228,8 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
 
   fun getFab(): FloatingActionButton = fab
 
+  fun getCommentDelay(): CommentDelay = selectedCommentDelay
+
   fun showFab() {
     if (pager.currentItem != 1) {
       fab.show()
@@ -266,6 +276,61 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
 
   private fun purchasePremium() {
     startActivity(Intent(this, GoPremiumActivity::class.java))
+  }
+
+  private fun showAddDelayDialog() {
+    MaterialDialog.Builder(this)
+        .title(R.string.worried_about_spoilers)
+        .content(getString(R.string.add_a_delay_to_these_comments))
+        .items(R.array.add_delay_options)
+        .itemsCallbackSingleChoice(getIndexOfCommentDelay(selectedCommentDelay)) { _, _, which, _ ->
+          if (!premiumService.isPremium() && !localRepository.isGameStreamUnlocked(gameId)) {
+            val params = Bundle()
+            params.putString(SwishEventParam.GO_PREMIUM_ORIGIN.key, GoPremiumOrigin.GAME_THREAD_DELAY.originName)
+            eventLogger.logEvent(SwishEvent.GO_PREMIUM, params)
+
+            purchasePremium()
+            selectedCommentDelay = CommentDelay.NONE
+            return@itemsCallbackSingleChoice true
+          }
+
+          selectedCommentDelay = when (which) {
+            1 -> CommentDelay.FIVE
+            2 -> CommentDelay.TEN
+            3 -> CommentDelay.TWENTY
+            4 -> CommentDelay.THIRTY
+            5 -> CommentDelay.MINUTE
+            6 -> CommentDelay.TWO_MINUTES
+            7 -> CommentDelay.FIVE_MINUTES
+            else -> CommentDelay.NONE
+          }
+          gameSummaryEvents.accept(Event.StreamingEnabled)
+
+          val params = Bundle()
+          params.putInt(SwishEventParam.DELAY_TIME_SECONDS.key, selectedCommentDelay.seconds)
+          eventLogger.logEvent(SwishEvent.DELAY_COMMENTS, params)
+
+          return@itemsCallbackSingleChoice true
+        }
+        .positiveText(getString(R.string.add_delay))
+        .negativeText(getString(R.string.cancel))
+        .show()
+  }
+
+  private fun getIndexOfCommentDelay(commentDelay: CommentDelay): Int {
+    if (!premiumService.isPremium()) {
+      return 0
+    }
+    return when (commentDelay) {
+      CommentDelay.FIVE -> 1
+      CommentDelay.TEN -> 2
+      CommentDelay.TWENTY -> 3
+      CommentDelay.THIRTY -> 4
+      CommentDelay.MINUTE -> 5
+      CommentDelay.TWO_MINUTES -> 6
+      CommentDelay.FIVE_MINUTES -> 7
+      else -> 0
+    }
   }
 
   companion object {

@@ -13,6 +13,7 @@ import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIVie
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState.POST
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState.PRE
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.BackPressed
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.DelayPressed
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamChecked
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamUnchecked
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team
@@ -26,6 +27,7 @@ class GameSummaryUIView(parent: ViewGroup) {
 
   private val backBtn: ImageButton = view.findViewById(R.id.backButton)
   private val streamSwitch: Switch = view.findViewById(R.id.streamSwitch)
+  private val delayBtn: ImageButton = view.findViewById(R.id.delayButton)
 
   private val homeTeamInfo: View = view.findViewById(R.id.home)
   private val homeLogo: ImageView = homeTeamInfo.findViewById(R.id.logo)
@@ -57,6 +59,7 @@ class GameSummaryUIView(parent: ViewGroup) {
         uiEvents.accept(StreamUnchecked)
       }
     }
+    delayBtn.setOnClickListener { uiEvents.accept(DelayPressed) }
 
     gameStatus.loadLayoutDescription(R.xml.game_detail_game_status_states)
   }
@@ -144,5 +147,6 @@ class GameSummaryUIView(parent: ViewGroup) {
     object BackPressed : GameSummaryUiEvent()
     object StreamChecked : GameSummaryUiEvent()
     object StreamUnchecked : GameSummaryUiEvent()
+    object DelayPressed : GameSummaryUiEvent()
   }
 }
