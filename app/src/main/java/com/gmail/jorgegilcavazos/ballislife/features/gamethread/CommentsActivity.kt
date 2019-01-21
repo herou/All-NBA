@@ -123,11 +123,16 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
       override fun onPageScrollStateChanged(state: Int) {}
       override fun onPageScrolled(position: Int, offset: Float, OffsetPixels: Int) {}
       override fun onPageSelected(position: Int) {
-        if (position == BOX_SCORE_TAB) fab.hide()
+        when (position) {
+          GAME_THREAD_TAB -> gameSummaryEvents.accept(Event.LiveThreadSelected)
+          BOX_SCORE_TAB -> {
+            fab.hide()
+            gameSummaryEvents.accept(Event.BoxScoreSelected)
+          }
+          POST_GAME_TAB -> gameSummaryEvents.accept(Event.PostThreadSelected)
+        }
       }
     })
-
-    setSelectedTab(intent.getStringExtra(GamesFragment.GAME_STATUS))
 
     fab.setOnClickListener(this)
 
@@ -142,6 +147,8 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
     } else {
       gameSummaryEvents.accept(Event.StreamingDisabled)
     }
+
+    setSelectedTab(intent.getStringExtra(GamesFragment.GAME_STATUS))
   }
 
   override fun onStart() {
@@ -241,11 +248,12 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
   }
 
   private fun setSelectedTab(gameStatus: String) {
-    when {
-      localRepository.openBoxScoreByDefault -> pager.currentItem = BOX_SCORE_TAB
-      gameStatus == GameStatus.POST.code -> pager.currentItem = POST_GAME_TAB
-      else -> pager.currentItem = GAME_THREAD_TAB
+    val tabToSelect = when {
+      localRepository.openBoxScoreByDefault -> BOX_SCORE_TAB
+      gameStatus == GameStatus.POST.code ->  POST_GAME_TAB
+      else -> GAME_THREAD_TAB
     }
+    pager.currentItem = tabToSelect
   }
 
   private fun openUnlockVsPremiumDialog() {

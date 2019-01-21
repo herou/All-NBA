@@ -2,7 +2,10 @@ package com.gmail.jorgegilcavazos.ballislife.features.gamedetail
 
 import android.view.ViewGroup
 import com.gmail.jorgegilcavazos.ballislife.common.ErrorType
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.BoxScoreSelected
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.GameUpdated
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.LiveThreadSelected
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.PostThreadSelected
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.StreamingDisabled
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryComponent.Event.StreamingEnabled
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState
@@ -76,6 +79,14 @@ class GameSummaryComponent(
             }
             StreamingEnabled -> uiView.setStreamEnabled(true)
             StreamingDisabled -> uiView.setStreamEnabled(false)
+            LiveThreadSelected -> {
+              uiView.setStreamSwitchVisibility(visible = true)
+              uiView.setDelayButtonVisibility(visible = true)
+            }
+            BoxScoreSelected, PostThreadSelected -> {
+              uiView.setStreamSwitchVisibility(visible = false)
+              uiView.setDelayButtonVisibility(visible = false)
+            }
           }
         }
   }
@@ -115,6 +126,9 @@ class GameSummaryComponent(
     data class GameUpdateFailed(val e: ErrorType) : Event()
     object StreamingEnabled : Event()
     object StreamingDisabled : Event()
+    object LiveThreadSelected : Event()
+    object BoxScoreSelected : Event()
+    object PostThreadSelected : Event()
   }
 
   companion object {

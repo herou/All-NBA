@@ -139,6 +139,14 @@ class GameSummaryUIView(parent: ViewGroup) {
     streamSwitch.isChecked = enabled
   }
 
+  fun setStreamSwitchVisibility(visible: Boolean) {
+    streamSwitch.visibility = if (visible) View.VISIBLE else View.GONE
+  }
+
+  fun setDelayButtonVisibility(visible: Boolean) {
+    delayBtn.visibility = if (visible) View.VISIBLE else View.GONE
+  }
+
   enum class GameState {
     PRE, LIVE, POST
   }
