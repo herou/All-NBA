@@ -8,4 +8,5 @@ public class LocalSharedPreferences {
     static final String SWISH_THEME = "swishTheme";
     static final String SHOW_WHATS_NEW = "showWhatsNew";
     static final String STREAM_GAME_UNLOCKS = "streamGameUnlocks";
+    static final String STREAMING_ENABLED = "streamingEnabled";
 }

@@ -51,8 +51,6 @@ interface GameThreadView {
 
   fun submissionReplies(): Observable<Any>
 
-  fun streamChanges(): Observable<Boolean>
-
   fun openReplyToCommentActivity(parentComment: Comment)
 
   fun openReplyToSubmissionActivity(submissionId: String)
@@ -87,8 +85,6 @@ interface GameThreadView {
 
   fun purchasePremium()
 
-  fun setStreamSwitch(isChecked: Boolean)
-
   fun commentCollapses(): Observable<String>
 
   fun commentUnCollapses(): Observable<String>
@@ -100,10 +96,6 @@ interface GameThreadView {
   fun getCommentDelay(): CommentDelay
 
   fun setCommentDelay(delay: CommentDelay)
-
-  fun logGoPremiumFromStream()
-
-  fun openUnlockVsPremiumDialog()
 
   fun gameId(): String
 }

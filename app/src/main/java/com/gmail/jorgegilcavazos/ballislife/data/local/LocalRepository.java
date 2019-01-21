@@ -47,4 +47,8 @@ public interface LocalRepository {
     void saveGameStreamAsUnlocked(String gameId);
 
     boolean isGameStreamUnlocked(String gameId);
+
+    boolean isGameThreadStreamingEnabled();
+
+    void setGameThreadStreamingEnabled(boolean enabled);
 }

@@ -183,4 +183,16 @@ public class AppLocalRepository implements LocalRepository {
         return localSharedPreferences.getStringSet(LocalSharedPreferences.STREAM_GAME_UNLOCKS,
                 new HashSet<>()).contains(gameId);
     }
+
+    @Override
+    public boolean isGameThreadStreamingEnabled() {
+        return localSharedPreferences.getBoolean(LocalSharedPreferences.STREAMING_ENABLED, false);
+    }
+
+    @Override
+    public void setGameThreadStreamingEnabled(boolean enabled) {
+        SharedPreferences.Editor editor = localSharedPreferences.edit();
+        editor.putBoolean(LocalSharedPreferences.STREAMING_ENABLED, enabled);
+        editor.commit();
+    }
 }

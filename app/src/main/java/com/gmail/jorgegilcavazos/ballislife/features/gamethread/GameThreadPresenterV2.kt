@@ -1,8 +1,6 @@
 package com.gmail.jorgegilcavazos.ballislife.features.gamethread
 
 import android.support.annotation.VisibleForTesting
-import com.gmail.jorgegilcavazos.ballislife.analytics.EventLogger
-import com.gmail.jorgegilcavazos.ballislife.analytics.SwishEvent
 import com.gmail.jorgegilcavazos.ballislife.base.BasePresenter
 import com.gmail.jorgegilcavazos.ballislife.data.actions.RedditActions
 import com.gmail.jorgegilcavazos.ballislife.data.actions.models.ReplyUIModel
@@ -10,7 +8,9 @@ import com.gmail.jorgegilcavazos.ballislife.data.actions.models.SaveUIModel
 import com.gmail.jorgegilcavazos.ballislife.data.local.LocalRepository
 import com.gmail.jorgegilcavazos.ballislife.data.repository.comments.ContributionRepository
 import com.gmail.jorgegilcavazos.ballislife.data.repository.gamethreads.GameThreadsRepository
-import com.gmail.jorgegilcavazos.ballislife.features.model.CommentDelay
+import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus.StreamMode.OFF
+import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus.StreamMode.ON
+import com.gmail.jorgegilcavazos.ballislife.features.model.CommentDelay.NONE
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentItem
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentWrapper
 import com.gmail.jorgegilcavazos.ballislife.features.model.GameThreadType
@@ -38,14 +38,14 @@ class GameThreadPresenterV2 @Inject constructor(
     private val disposable: CompositeDisposable,
     private val networkUtils: NetworkUtils,
     private val errorHandler: ErrorHandler,
-    private val eventLogger: EventLogger) : BasePresenter<GameThreadView>() {
+    private val streamChangesBus: StreamChangesBus
+) : BasePresenter<GameThreadView>() {
 
   private lateinit var type: GameThreadType
   private lateinit var home: String
   private lateinit var visitor: String
   private var gameTimeUtc: Long = 0
   private var currentSubmission: Submission? = null
-  private var shouldStream = false
 
   override fun attachView(view: GameThreadView) {
     super.attachView(view)
@@ -118,21 +118,14 @@ class GameThreadPresenterV2 @Inject constructor(
           }
         }.addTo(disposable)
 
-    view.streamChanges()
-        .subscribe { isChecked ->
-          if (isChecked) {
-            if (view.isPremiumPurchased() || localRepository.isGameStreamUnlocked(view.gameId())) {
-              eventLogger.logEvent(SwishEvent.STREAM, null)
-              shouldStream = true
-              loadGameThread()
-            } else {
-              view.openUnlockVsPremiumDialog()
-              view.setStreamSwitch(false)
+    streamChangesBus.getChanges()
+        .subscribe { streamMode ->
+          when (streamMode) {
+            ON -> loadGameThread(repeating = true)
+            OFF -> {
+              loadGameThread(repeating = false)
+              view.setCommentDelay(NONE)
             }
-          } else {
-            view.setCommentDelay(CommentDelay.NONE)
-            shouldStream = false
-            loadGameThread()
           }
         }.addTo(disposable)
 
@@ -157,10 +150,10 @@ class GameThreadPresenterV2 @Inject constructor(
     }
   }
 
-  fun loadGameThread() {
-    val gameThreadsObs = if (shouldStream) {
+  fun loadGameThread(repeating: Boolean) {
+    val gameThreadsObs = if (repeating) {
       gameThreadsRepository.gameThreads(home, visitor, gameTimeUtc, type)
-          .repeatWhen({ o -> o.delay(10, TimeUnit.SECONDS) })
+          .repeatWhen { obs -> obs.delay(10, TimeUnit.SECONDS) }
     } else {
       gameThreadsRepository.gameThreads(home, visitor, gameTimeUtc, type)
     }
@@ -170,7 +163,7 @@ class GameThreadPresenterV2 @Inject constructor(
         .observeOn(schedulerProvider.ui(), true)
         .subscribe(
             { uiModel ->
-              if (uiModel.inProgress && !shouldStream) {
+              if (uiModel.inProgress && !localRepository.isGameThreadStreamingEnabled) {
                 view.setLoadingIndicator(true)
                 view.hideFab()
               } else {
@@ -339,18 +332,9 @@ class GameThreadPresenterV2 @Inject constructor(
         .addTo(disposable)
   }
 
-  fun onSwitchCreated() {
-    view.setStreamSwitch(shouldStream)
-  }
-
   @VisibleForTesting
   fun setCurrentSubmission(submission: Submission) {
     currentSubmission = submission
-  }
-
-  @VisibleForTesting
-  fun setShouldStream(shouldStream: Boolean) {
-    this.shouldStream = shouldStream
   }
 
   private fun createCommentItem(root: CommentNode): CommentItem {

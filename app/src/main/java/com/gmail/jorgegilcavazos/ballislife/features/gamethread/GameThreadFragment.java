@@ -9,13 +9,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +35,6 @@ import com.gmail.jorgegilcavazos.ballislife.util.RedditUtils;
 import com.gmail.jorgegilcavazos.ballislife.util.ThemeUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 import net.dean.jraw.models.Comment;
 
@@ -61,8 +53,8 @@ import io.reactivex.subjects.PublishSubject;
 
 import static android.app.Activity.RESULT_OK;
 
-public class GameThreadFragment extends Fragment implements GameThreadView, SwipeRefreshLayout
-        .OnRefreshListener, CompoundButton.OnCheckedChangeListener, RewardedVideoAdListener {
+public class GameThreadFragment extends Fragment implements GameThreadView,
+        SwipeRefreshLayout.OnRefreshListener {
 
     public static final String THREAD_TYPE_KEY = "THREAD_TYPE";
     public static final String GAME_DATE_KEY = "GAME_DATE";
@@ -80,7 +72,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
     @BindView(R.id.adView) AdView adView;
 
     private PublishSubject<Object> fabClicks = PublishSubject.create();
-    private PublishSubject<Boolean> streamChanges = PublishSubject.create();
 
     private RecyclerView.LayoutManager lmComments;
     private ThreadAdapter threadAdapter;
@@ -89,9 +80,7 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
     private GameThreadType threadType;
     private String gameId;
     private long gameDate;
-    private Switch streamSwitch;
     private CommentDelay selectedCommentDelay = CommentDelay.NONE;
-    private RewardedVideoAd rewardedVideoAd;
 
     public GameThreadFragment() {
         // Required empty public constructor.
@@ -128,11 +117,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
             gameId = getArguments().getString(CommentsActivity.GAME_ID_KEY);
             gameDate = getArguments().getLong(GAME_DATE_KEY);
         }
-
-        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(getActivity());
-        rewardedVideoAd.setRewardedVideoAdListener(this);
-        rewardedVideoAd.loadAd(getString(R.string.video_reward_id),
-                new AdRequest.Builder().build());
     }
 
     @Nullable
@@ -164,7 +148,7 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
         });
 
         presenter.attachView(this);
-        presenter.loadGameThread();
+        presenter.loadGameThread(localRepository.isGameThreadStreamingEnabled());
 
         return view;
     }
@@ -182,7 +166,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
 
     @Override
     public void onResume() {
-        rewardedVideoAd.resume(getActivity());
         super.onResume();
         // Check if the user is premium or if the game is unlocked and hide ads if either is
         // true, but don't load the ad again if false. This is necessary for when the user
@@ -193,12 +176,6 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
         } else {
             adView.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onPause() {
-        rewardedVideoAd.pause(getActivity());
-        super.onPause();
     }
 
     @Override
@@ -217,28 +194,10 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
     }
 
     @Override
-    public void onDestroy() {
-        rewardedVideoAd.destroy(getActivity());
-        super.onDestroy();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (threadType == GameThreadType.LIVE) {
-            inflater.inflate(R.menu.menu_game_thread, menu);
-            streamSwitch = menu.findItem(R.id.action_stream).getActionView()
-                    .findViewById(R.id.switch_stream);
-            streamSwitch.setOnCheckedChangeListener(this);
-            presenter.onSwitchCreated();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                presenter.loadGameThread();
+                presenter.loadGameThread(localRepository.isGameThreadStreamingEnabled());
                 return true;
             case R.id.action_add_delay:
                 showAddDelayDialog();
@@ -249,7 +208,7 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
 
     @Override
     public void onRefresh() {
-        presenter.loadGameThread();
+        presenter.loadGameThread(localRepository.isGameThreadStreamingEnabled());
     }
 
     @NonNull
@@ -469,27 +428,9 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        streamChanges.onNext(isChecked);
-    }
-
-    @NotNull
-    @Override
-    public Observable<Boolean> streamChanges() {
-        return streamChanges;
-    }
-
-    @Override
     public void purchasePremium() {
         Intent intent = new Intent(getActivity(), GoPremiumActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void setStreamSwitch(boolean isChecked) {
-        if (streamSwitch != null) {
-            streamSwitch.setChecked(isChecked);
-        }
     }
 
     @NotNull
@@ -525,80 +466,10 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
         selectedCommentDelay = delay;
     }
 
-    @Override
-    public void logGoPremiumFromStream() {
-        Bundle params = new Bundle();
-        params.putString(SwishEventParam.GO_PREMIUM_ORIGIN.getKey(),
-                GoPremiumOrigin.GAME_THREAD_STREAM.getOriginName());
-        eventLogger.logEvent(SwishEvent.GO_PREMIUM, params);
-    }
-
-    @Override
-    public void openUnlockVsPremiumDialog() {
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.unlock_game_title)
-                .content(R.string.unlock_game_content)
-                .positiveText(R.string.go_premium_no_excl)
-                .negativeText(R.string.unlock_game_watch_video)
-                .onPositive((dialog, which) -> {
-                    logGoPremiumFromStream();
-                    purchasePremium();
-                })
-                .onNegative((dialog, which) -> {
-                    rewardedVideoAd.show();
-                })
-                .build()
-                .show();
-    }
-
     @NotNull
     @Override
     public String gameId() {
         return gameId;
-    }
-
-    @Override
-    public void onRewardedVideoAdLoaded() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdOpened() {
-
-    }
-
-    @Override
-    public void onRewardedVideoStarted() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdClosed() {
-
-    }
-
-    @Override
-    public void onRewarded(RewardItem rewardItem) {
-        if (gameId == null) {
-            throw new IllegalStateException("Game ID should not be null");
-        }
-        localRepository.saveGameStreamAsUnlocked(gameId);
-        Toast.makeText(getActivity(), R.string.game_unlocked, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRewardedVideoAdLeftApplication() {
-
-    }
-
-    @Override
-    public void onRewardedVideoAdFailedToLoad(int i) {
-
-    }
-
-    @Override
-    public void onRewardedVideoCompleted() {
-
     }
 
     private void showAddDelayDialog() {
@@ -646,7 +517,9 @@ public class GameThreadFragment extends Fragment implements GameThreadView, Swip
                                     selectedCommentDelay = CommentDelay.NONE;
                                     break;
                             }
-                            streamSwitch.setChecked(true);
+                            // TODO: enable streaming..
+                            //streamSwitch.setChecked(true);
+
 
                             Bundle params = new Bundle();
                             params.putInt(SwishEventParam.DELAY_TIME_SECONDS.getKey(),

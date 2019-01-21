@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Switch
 import android.widget.TextView
 import com.gmail.jorgegilcavazos.ballislife.R
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState.LIVE
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState.POST
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameState.PRE
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.BackPressed
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamChecked
+import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamUnchecked
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -22,6 +25,7 @@ class GameSummaryUIView(parent: ViewGroup) {
       LayoutInflater.from(parent.context).inflate(R.layout.game_detail_header, parent, false)
 
   private val backBtn: ImageButton = view.findViewById(R.id.backButton)
+  private val streamSwitch: Switch = view.findViewById(R.id.streamSwitch)
 
   private val homeTeamInfo: View = view.findViewById(R.id.home)
   private val homeLogo: ImageView = homeTeamInfo.findViewById(R.id.logo)
@@ -46,6 +50,13 @@ class GameSummaryUIView(parent: ViewGroup) {
     parent.addView(view)
 
     backBtn.setOnClickListener { uiEvents.accept(BackPressed) }
+    streamSwitch.setOnCheckedChangeListener { _, isChecked ->
+      if (isChecked) {
+        uiEvents.accept(StreamChecked)
+      } else {
+        uiEvents.accept(StreamUnchecked)
+      }
+    }
 
     gameStatus.loadLayoutDescription(R.xml.game_detail_game_status_states)
   }
@@ -121,11 +132,17 @@ class GameSummaryUIView(parent: ViewGroup) {
     this.broadcaster.text = broadcaster
   }
 
+  fun setStreamEnabled(enabled: Boolean) {
+    streamSwitch.isChecked = enabled
+  }
+
   enum class GameState {
     PRE, LIVE, POST
   }
 
   sealed class GameSummaryUiEvent {
     object BackPressed : GameSummaryUiEvent()
+    object StreamChecked : GameSummaryUiEvent()
+    object StreamUnchecked : GameSummaryUiEvent()
   }
 }
