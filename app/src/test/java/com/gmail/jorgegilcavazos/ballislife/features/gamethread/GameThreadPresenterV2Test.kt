@@ -1,6 +1,5 @@
 package com.gmail.jorgegilcavazos.ballislife.features.gamethread
 
-import com.gmail.jorgegilcavazos.ballislife.analytics.EventLogger
 import com.gmail.jorgegilcavazos.ballislife.data.actions.RedditActions
 import com.gmail.jorgegilcavazos.ballislife.data.actions.models.ReplyUIModel
 import com.gmail.jorgegilcavazos.ballislife.data.actions.models.SaveUIModel
@@ -16,6 +15,7 @@ import com.gmail.jorgegilcavazos.ballislife.util.NetworkUtils
 import com.gmail.jorgegilcavazos.ballislife.util.schedulers.TrampolineSchedulerProvider
 import com.google.common.collect.FluentIterable
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -28,9 +28,11 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import java.util.*
+import java.util.Calendar
 
 class GameThreadPresenterV2Test {
 
@@ -64,7 +66,7 @@ class GameThreadPresenterV2Test {
   @Mock private lateinit var disposable: CompositeDisposable
   @Mock private lateinit var mockNetworkUtils: NetworkUtils
   @Mock private lateinit var mockErrorHandler: ErrorHandler
-  private val mockEventLogger: EventLogger = mock()
+  private val streamChangesBus: StreamChangesBus = mock()
 
   private lateinit var presenter: GameThreadPresenterV2
 
@@ -83,9 +85,9 @@ class GameThreadPresenterV2Test {
     `when`(mockView.novotes()).thenReturn(novotes)
     `when`(mockView.replies()).thenReturn(replies)
     `when`(mockView.submissionReplies()).thenReturn(submissionReplies)
-    `when`(mockView.streamChanges()).thenReturn(streamChanges)
     `when`(mockView.commentCollapses()).thenReturn(commentCollapses)
     `when`(mockView.commentUnCollapses()).thenReturn(commentUncollapses)
+    whenever(streamChangesBus.getChanges()).thenReturn(Observable.empty())
 
     presenter = GameThreadPresenterV2(
         mockGameThreadsRepository,
@@ -97,7 +99,7 @@ class GameThreadPresenterV2Test {
         disposable,
         mockNetworkUtils,
         mockErrorHandler,
-        mockEventLogger)
+        streamChangesBus)
     presenter.attachView(mockView)
   }
 
@@ -282,7 +284,7 @@ class GameThreadPresenterV2Test {
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.inProgress()))
 
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = false)
 
     verify(mockGameThreadsRepository).gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE)
     verify(mockView).setLoadingIndicator(true)
@@ -297,7 +299,7 @@ class GameThreadPresenterV2Test {
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.notFound()))
 
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = false)
 
     verify(mockView).setLoadingIndicator(false)
     verify(mockView).hideErrorLoadingText()
@@ -318,11 +320,11 @@ class GameThreadPresenterV2Test {
     val mockSubmission = Mockito.mock(Submission::class.java)
     `when`(mockSubmission.comments).thenReturn(mockCommentNode1)
     `when`(mockCommentNode1.walkTree())
-        .thenReturn(FluentIterable.of(arrayOf(mockCommentNode1, mockCommentNode2)))
+        .thenReturn(FluentIterable.of(mockCommentNode1, mockCommentNode2))
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.found(mockSubmission)))
 
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = false)
 
     verify(mockView).setLoadingIndicator(false)
     verify(mockView).hideErrorLoadingText()
@@ -337,11 +339,11 @@ class GameThreadPresenterV2Test {
     val mockCommentNode1 = Mockito.mock(CommentNode::class.java)
     val mockSubmission = Mockito.mock(Submission::class.java)
     `when`(mockSubmission.comments).thenReturn(mockCommentNode1)
-    `when`(mockCommentNode1.walkTree()).thenReturn(FluentIterable.of(emptyArray()))
+    `when`(mockCommentNode1.walkTree()).thenReturn(FluentIterable.of())
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.found(mockSubmission)))
 
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = false)
 
     verify(mockView).setLoadingIndicator(false)
     verify(mockView).hideErrorLoadingText()
@@ -360,7 +362,7 @@ class GameThreadPresenterV2Test {
     `when`(mockNetworkUtils.isNetworkAvailable()).thenReturn(true)
     `when`(mockErrorHandler.handleError(e)).thenReturn(404)
 
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = false)
 
     verify(mockView).setLoadingIndicator(false)
     verify(mockView).showErrorLoadingText(404)
@@ -373,7 +375,7 @@ class GameThreadPresenterV2Test {
         .thenReturn(Observable.error(e))
     `when`(mockNetworkUtils.isNetworkAvailable()).thenReturn(false)
 
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = false)
 
     verify(mockView).setLoadingIndicator(false)
     verify(mockView).showNoNetAvailableText()
@@ -384,8 +386,7 @@ class GameThreadPresenterV2Test {
     `when`(mockGameThreadsRepository.gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE))
         .thenReturn(Observable.just(GameThreadsUIModel.inProgress()))
 
-    presenter.setShouldStream(true)
-    presenter.loadGameThread()
+    presenter.loadGameThread(repeating = true)
 
     verify(mockGameThreadsRepository).gameThreads(HOME, VISITOR, GAME_TIME_UTC, THREAD_TYPE)
     verify(mockView).setLoadingIndicator(false)
@@ -475,28 +476,6 @@ class GameThreadPresenterV2Test {
     presenter.replyToSubmission(SUBMISSION_ID, RESPONSE)
 
     verify(mockView).showSubmittedCommentToast()
-  }
-
-  @Test
-  fun turnOnStreamingWithPremiumPurchased() {
-    `when`(mockView.isPremiumPurchased()).thenReturn(true)
-
-    streamChanges.onNext(true)
-
-    verify(mockView).isPremiumPurchased()
-    verify(mockView, times(0)).setStreamSwitch(false)
-    verify(mockView, times(0)).purchasePremium()
-  }
-
-  @Test
-  fun turnOnStreamingWithoutPremiumPurchased() {
-    `when`(mockView.isPremiumPurchased()).thenReturn(false)
-
-    streamChanges.onNext(true)
-
-    verify(mockView).isPremiumPurchased()
-    verify(mockView).setStreamSwitch(false)
-    verify(mockView).openUnlockVsPremiumDialog()
   }
 
   @Test

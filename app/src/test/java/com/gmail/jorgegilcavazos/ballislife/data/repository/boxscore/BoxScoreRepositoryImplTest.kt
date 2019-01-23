@@ -40,8 +40,7 @@ class BoxScoreRepositoryImplTest {
 	fun loadBoxScoreCacheAvailableDontForceNetwork() {
 		`when`(mockNbaGamesService.boxScore("GAME_ID"))
 				.thenReturn(Single.error(Exception()))
-		val boxScore = BoxScoreResponse(BoxScoreValues(
-				BoxScoreTeam(listOf(), 0), BoxScoreTeam(listOf(), 0)))
+		val boxScore = createBoxScoreResponse()
 		repository.saveBoxScoreInCache("GAME_ID", boxScore)
 
 		val testObserver = repository.boxScore("GAME_ID", false).test()
@@ -53,8 +52,7 @@ class BoxScoreRepositoryImplTest {
 
 	@Test
 	fun loadBoxScoreCacheNotAvailableDontForceNetwork() {
-		val boxScore = BoxScoreResponse(BoxScoreValues(
-				BoxScoreTeam(listOf(), 0), BoxScoreTeam(listOf(), 0)))
+		val boxScore = createBoxScoreResponse()
 		`when`(mockNbaGamesService.boxScore("GAME_ID")).thenReturn(Single.just(boxScore))
 
 		val testObserver = repository.boxScore("GAME_ID", false).test()
@@ -67,8 +65,7 @@ class BoxScoreRepositoryImplTest {
 
 	@Test
 	fun loadBoxScoreForceNetworkSuccess() {
-		val boxScore = BoxScoreResponse(BoxScoreValues(
-				BoxScoreTeam(listOf(), 0), BoxScoreTeam(listOf(), 0)))
+		val boxScore = createBoxScoreResponse()
 		`when`(mockNbaGamesService.boxScore("GAME_ID")).thenReturn(Single.just(boxScore))
 
 		val testObserver = repository.boxScore("GAME_ID", true).test()
@@ -87,5 +84,13 @@ class BoxScoreRepositoryImplTest {
 		testObserver.assertValueCount(2)
 		testObserver.assertValueAt(0, { it.inProgress })
 		testObserver.assertValueAt(1, { it.notAvailable })
+	}
+
+	private fun createBoxScoreResponse() : BoxScoreResponse {
+		return BoxScoreResponse(BoxScoreValues(
+				BoxScoreTeam(listOf(), 0, 5, 5, 5, 5, 3, 3, 3, 3),
+				BoxScoreTeam(listOf(), 0, 8, 8, 8, 8, 2, 2, 2, 2),
+				4
+		))
 	}
 }

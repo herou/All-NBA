@@ -11,7 +11,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -42,8 +44,7 @@ class BoxScorePresenterTest {
 
 	@Test
 	fun loadHomeBoxScoreSuccess() {
-		val boxScore = BoxScoreResponse(BoxScoreValues(
-				BoxScoreTeam(listOf(), 0), BoxScoreTeam(listOf(), 0)))
+		val boxScore = createBoxScoreResponse()
 		`when`(mockBoxScoreRepository.boxScore("GAME_ID", true))
 				.thenReturn(Observable.just(
 						BoxScoreUIModel.inProgress(),
@@ -60,8 +61,7 @@ class BoxScorePresenterTest {
 
 	@Test
 	fun loadVisitorBoxScoreSuccess() {
-		val boxScore = BoxScoreResponse(BoxScoreValues(
-				BoxScoreTeam(listOf(), 0), BoxScoreTeam(listOf(), 0)))
+		val boxScore = createBoxScoreResponse()
 		`when`(mockBoxScoreRepository.boxScore("GAME_ID", true))
 				.thenReturn(Observable.just(
 						BoxScoreUIModel.inProgress(),
@@ -102,5 +102,13 @@ class BoxScorePresenterTest {
 		presenter.loadBoxScore("GAME_ID", BoxScoreSelectedTeam.HOME, true)
 
 		verify(mockView).showUnknownErrorToast(-1)
+	}
+
+	private fun createBoxScoreResponse() : BoxScoreResponse {
+		return BoxScoreResponse(BoxScoreValues(
+				BoxScoreTeam(listOf(), 0, 5, 5, 5, 5, 3, 3, 3, 3),
+				BoxScoreTeam(listOf(), 0, 8, 8, 8, 8, 2, 2, 2, 2),
+				4
+		))
 	}
 }

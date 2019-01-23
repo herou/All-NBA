@@ -19,11 +19,11 @@ public class UtilitiesTest {
         String overTime2 = Utilities.getPeriodString("6", "OT");
         String overTime6 = Utilities.getPeriodString("10", "OT");
 
-        assertEquals("1 Qtr", firstQtr);
-        assertEquals("4 Qtr", fourthQtr);
-        assertEquals("1OT", overTime1);
-        assertEquals("2OT", overTime2);
-        assertEquals("6OT", overTime6);
+        assertEquals("Q1", firstQtr);
+        assertEquals("Q4", fourthQtr);
+        assertEquals("OT1", overTime1);
+        assertEquals("OT2", overTime2);
+        assertEquals("OT6", overTime6);
     }
 
     @Test
