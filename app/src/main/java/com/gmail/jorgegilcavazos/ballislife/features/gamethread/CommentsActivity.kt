@@ -106,6 +106,7 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
       override fun onRewardedVideoCompleted() { }
       override fun onRewarded(item: RewardItem?) {
         localRepository.saveGameStreamAsUnlocked(gameId)
+        gameSummaryEvents.accept(Event.StreamingEnabled)
         Toast.makeText(this@CommentsActivity, R.string.game_unlocked, Toast.LENGTH_SHORT).show()
       }
       override fun onRewardedVideoStarted() { }
@@ -160,8 +161,13 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
             StreamChecked -> {
               if (premiumService.isPremium() || localRepository.isGameStreamUnlocked(gameId)) {
                 eventLogger.logEvent(SwishEvent.STREAM, null)
-                localRepository.isGameThreadStreamingEnabled = true
                 streamChangesBus.notifyChanged(ON)
+
+                if (premiumService.isPremium()) {
+                  // Enable streaming by default if the user is premium, not if the user saw a
+                  // rewarded ad.
+                  localRepository.isGameThreadStreamingEnabled = true
+                }
               } else {
                 openUnlockVsPremiumDialog()
                 gameSummaryEvents.accept(Event.StreamingDisabled)

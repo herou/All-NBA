@@ -160,7 +160,7 @@ class GameThreadPresenterV2 @Inject constructor(
         .observeOn(schedulerProvider.ui(), true)
         .subscribe(
             { uiModel ->
-              if (uiModel.inProgress && !localRepository.isGameThreadStreamingEnabled) {
+              if (uiModel.inProgress && !repeating) {
                 view.setLoadingIndicator(true)
                 view.hideFab()
               } else {
