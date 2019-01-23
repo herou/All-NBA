@@ -195,7 +195,7 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
         .subscribe(gameSummaryEvents)
         .addTo(disposables)
 
-    Observable.interval(30, SECONDS)
+    Observable.interval(SCORE_REFRESH_INTERVAL_SECONDS, SECONDS)
         .filter { gameStatus == NbaGame.PRE_GAME || gameStatus == NbaGame.IN_GAME }
         .subscribe { gameUpdatesInteractor.refresh(gameId) }
         .addTo(disposables)
@@ -349,6 +349,8 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
   }
 
   companion object {
+    private const val SCORE_REFRESH_INTERVAL_SECONDS: Long = 45
+
     const val GAME_ID_KEY = "gameId"
     const val HOME_TEAM_KEY = "homeTeamKey"
     const val AWAY_TEAM_KEY = "awayTeamKey"
