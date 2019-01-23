@@ -77,7 +77,6 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
     private BoxScoreSelectedTeam teamSelected;
     private int textColor;
 
-    private QuarterByQuarterScoreComponent quarterByQuarterScoreComponent;
     private PublishRelay<QuarterByQuarterScoreComponent.Event> qtrByQtrScoreEvents =
             PublishRelay.create();
 
@@ -128,7 +127,7 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
             adView.loadAd(new AdRequest.Builder().build());
         }
 
-        quarterByQuarterScoreComponent = new QuarterByQuarterScoreComponent(
+        new QuarterByQuarterScoreComponent(
                 qtrByQtrScoreContainer,
                 qtrByQtrScoreEvents,
                 Team.Companion.fromKey(homeTeam),
@@ -197,11 +196,6 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
     @Override
     public void showVisitorBoxScore(@NonNull BoxScoreValues values) {
-        btnHome.setText(getString(R.string.box_score_team_score, homeTeam,
-                values.getHls().getScore()));
-        btnAway.setText(getString(R.string.box_score_team_score, awayTeam,
-                values.getVls().getScore()));
-
         List<String> players = new ArrayList<>();
 
         for (StatLine statLine : values.getVls().getPstsg()) {
@@ -240,12 +234,7 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
     }
 
     @Override
-    public void showHomeBoxScore(BoxScoreValues values) {
-        btnHome.setText(getString(R.string.box_score_team_score, homeTeam,
-                values.getHls().getScore()));
-        btnAway.setText(getString(R.string.box_score_team_score, awayTeam,
-                values.getVls().getScore()));
-
+    public void showHomeBoxScore(@NonNull BoxScoreValues values) {
         List<String> players = new ArrayList<>();
 
         for (StatLine statLine : values.getHls().getPstsg()) {
