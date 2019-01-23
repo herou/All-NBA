@@ -219,14 +219,16 @@ public class StandingsFragment extends Fragment implements StandingsView,
             TextView tvLosses = teamRow.findViewById(R.id.text_losses);
             TextView tvPct = teamRow.findViewById(R.id.text_pct);
             TextView tvGB = teamRow.findViewById(R.id.text_gb);
+            TextView tvStreak = teamRow.findViewById(R.id.textStreak);
             ImageView logo = teamRow.findViewById(R.id.logo);
 
-            String wins = "", losses = "", pct = "", gb = "";
+            String wins = "", losses = "", pct = "", gb = "", streak = "";
             for (Standings.StandingStat stat : teamStanding.getStats()) {
                 if (stat.getName().equals("W")) wins = stat.getValue();
                 if (stat.getName().equals("L")) losses = stat.getValue();
                 if (stat.getName().equals("PCT")) pct = stat.getValue();
                 if (stat.getName().equals("GB")) gb = stat.getValue();
+                if (stat.getName().equals("STRK")) streak = stat.getValue();
             }
 
             tvId.setText(String.valueOf(teamStanding.getSeed()));
@@ -235,6 +237,7 @@ public class StandingsFragment extends Fragment implements StandingsView,
             tvLosses.setText(losses);
             tvPct.setText(pct);
             tvGB.setText(gb);
+            tvStreak.setText(streak);
             logo.setImageResource(TeamUtils.Companion.getTeamLogo(teamStanding.getAbbreviation()));
 
             layoutContent.addView(teamRow);

@@ -61,6 +61,14 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
 
+        <TextView
+            android:id="@+id/textStreak"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="@string/streak_abbrev"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+
     </LinearLayout>
 
     <View

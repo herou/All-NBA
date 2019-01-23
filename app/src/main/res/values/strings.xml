@@ -73,6 +73,7 @@
     <string name="losses_abbrev">L</string>
     <string name="pct_abbrev">%</string>
     <string name="gb_abbrev">GB</string>
+    <string name="streak_abbrev">STRK</string>
 
     <!-- Highlights -->
     <string name="share_video">Share video</string>
