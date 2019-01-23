@@ -23,7 +23,7 @@ class BoxScorePresenter @Inject constructor(
 				.subscribe({ boxModel: BoxScoreUIModel ->
 					if (boxModel.inProgress) {
 						view.hideBoxScore()
-						view.setLoadingIndicator(true)
+						view.setLoadingIndicator(forceNetwork)
 						view.showBoxScoreNotAvailableMessage(false)
 					}
 

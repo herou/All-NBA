@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -56,12 +56,12 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
     @BindView(R.id.button_home) Button btnHome;
     @BindView(R.id.button_away) Button btnAway;
-    @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.text_load_message) TextView tvLoadMessage;
     @BindView(R.id.playersTable) TableLayout playersTable;
     @BindView(R.id.statsTable) TableLayout statsTable;
     @BindView(R.id.scrollView) ScrollView scrollView;
     @BindView(R.id.adView) AdView adView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
 
     private Unbinder unbinder;
 
@@ -100,6 +100,10 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
         presenter.attachView(this);
         presenter.loadBoxScore(gameId, teamSelected, true /* forceNetwork */);
+
+        swipeRefreshLayout.setOnRefreshListener(() ->
+                presenter.loadBoxScore(gameId, teamSelected, true)
+        );
 
         return view;
     }
@@ -264,11 +268,7 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
     @Override
     public void setLoadingIndicator(boolean active) {
-        if (active) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
+        swipeRefreshLayout.setRefreshing(active);
     }
 
     @Override
