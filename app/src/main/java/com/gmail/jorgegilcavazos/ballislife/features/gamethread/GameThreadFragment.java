@@ -188,7 +188,7 @@ public class GameThreadFragment extends Fragment implements GameThreadView,
 
     @Override
     public void onRefresh() {
-        presenter.loadGameThread(localRepository.isGameThreadStreamingEnabled());
+        presenter.loadGameThreadWithCurrentStreamingStatus();
     }
 
     @NonNull

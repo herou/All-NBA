@@ -46,6 +46,7 @@ class GameThreadPresenterV2 @Inject constructor(
   private lateinit var visitor: String
   private var gameTimeUtc: Long = 0
   private var currentSubmission: Submission? = null
+  private var isStreaming = false
 
   override fun attachView(view: GameThreadView) {
     super.attachView(view)
@@ -147,8 +148,13 @@ class GameThreadPresenterV2 @Inject constructor(
     }
   }
 
+  fun loadGameThreadWithCurrentStreamingStatus() {
+    loadGameThread(isStreaming)
+  }
+
   fun loadGameThread(repeating: Boolean) {
-    val gameThreadsObs = if (repeating && view.getThreadType() == LIVE) {
+    isStreaming = repeating && view.getThreadType() == LIVE
+    val gameThreadsObs = if (isStreaming) {
       gameThreadsRepository.gameThreads(home, visitor, gameTimeUtc, type)
           .repeatWhen { obs -> obs.delay(10, TimeUnit.SECONDS) }
     } else {
@@ -160,7 +166,7 @@ class GameThreadPresenterV2 @Inject constructor(
         .observeOn(schedulerProvider.ui(), true)
         .subscribe(
             { uiModel ->
-              if (uiModel.inProgress && !repeating) {
+              if (uiModel.inProgress && !isStreaming) {
                 view.setLoadingIndicator(true)
                 view.hideFab()
               } else {
