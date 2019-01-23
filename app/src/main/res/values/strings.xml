@@ -57,7 +57,7 @@
     <string name="no_comments_available">No comments to show</string>
     <string name="no_thread_made">No thread has been made for this game</string>
     <string name="game_thread">Live</string>
-    <string name="box_score">Box Score</string>
+    <string name="stats_tab_text">Stats</string>
     <string name="post_game_thread">Post-Game</string>
     <string name="failed_to_save_comment">Could not save comment</string>
     <string name="reply_to_sub_saved">Reply saved</string>

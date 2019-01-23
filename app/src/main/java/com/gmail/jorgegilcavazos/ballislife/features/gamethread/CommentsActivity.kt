@@ -25,7 +25,7 @@ import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIVie
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamChecked
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamUnchecked
 import com.gmail.jorgegilcavazos.ballislife.features.games.GamesFragment
-import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.BOX_SCORE_TAB
+import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.STATS_TAB
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.GAME_THREAD_TAB
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.PagerAdapter.POST_GAME_TAB
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.StreamChangesBus.StreamMode.OFF
@@ -126,7 +126,7 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
       override fun onPageSelected(position: Int) {
         when (position) {
           GAME_THREAD_TAB -> gameSummaryEvents.accept(Event.LiveThreadSelected)
-          BOX_SCORE_TAB -> {
+          STATS_TAB -> {
             fab.hide()
             gameSummaryEvents.accept(Event.BoxScoreSelected)
           }
@@ -256,7 +256,7 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
 
   private fun setSelectedTab(gameStatus: String) {
     val tabToSelect = when {
-      localRepository.openBoxScoreByDefault -> BOX_SCORE_TAB
+      localRepository.openBoxScoreByDefault -> STATS_TAB
       gameStatus == GameStatus.POST.code ->  POST_GAME_TAB
       else -> GAME_THREAD_TAB
     }

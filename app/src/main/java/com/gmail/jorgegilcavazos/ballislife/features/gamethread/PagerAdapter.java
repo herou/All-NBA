@@ -24,7 +24,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     private final Map<Integer, Fragment> fragmentMap = new HashMap<>();
 
     static final int GAME_THREAD_TAB = 0;
-    static final int BOX_SCORE_TAB = 1;
+    static final int STATS_TAB = 1;
     static final int POST_GAME_TAB = 2;
 
     public PagerAdapter(Context context, FragmentManager fragmentManager, Bundle bundle) {
@@ -47,7 +47,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                     fragmentMap.put(0, tab1);
                     return tab1;
                 }
-            case BOX_SCORE_TAB:
+            case STATS_TAB:
                 BoxScoreFragment tab2 = new BoxScoreFragment();
                 tab2.setArguments(bundle);
                 fragmentMap.put(1, tab2);
@@ -79,8 +79,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case GAME_THREAD_TAB:
                 return context.getString(R.string.game_thread);
-            case BOX_SCORE_TAB:
-                return context.getString(R.string.box_score);
+            case STATS_TAB:
+                return context.getString(R.string.stats_tab_text);
             case POST_GAME_TAB:
                 return context.getString(R.string.post_game_thread);
         }
