@@ -1,13 +1,17 @@
 package com.gmail.jorgegilcavazos.ballislife.features.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class BoxScoreValues {
 
     private BoxScoreTeam hls;
     private BoxScoreTeam vls;
+    @SerializedName("p") private int periods;
 
-    public BoxScoreValues(BoxScoreTeam hls, BoxScoreTeam vls) {
+    public BoxScoreValues(BoxScoreTeam hls, BoxScoreTeam vls, int periods) {
         this.hls = hls;
         this.vls = vls;
+        this.periods = periods;
     }
 
     public BoxScoreTeam getHls() {
@@ -24,5 +28,13 @@ public class BoxScoreValues {
 
     public void setVls(BoxScoreTeam vls) {
         this.vls = vls;
+    }
+
+    public int getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(int periods) {
+        this.periods = periods;
     }
 }

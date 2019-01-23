@@ -8,6 +8,8 @@ interface BoxScoreView {
 
 	fun showHomeBoxScore(values: BoxScoreValues)
 
+	fun showQuarterByQuarterTable(stats: QuarterByQuarterStats)
+
 	fun setLoadingIndicator(active: Boolean)
 
 	fun hideBoxScore()

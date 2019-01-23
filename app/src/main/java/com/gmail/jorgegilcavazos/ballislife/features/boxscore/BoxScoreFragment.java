@@ -24,15 +24,20 @@ import com.gmail.jorgegilcavazos.ballislife.R;
 import com.gmail.jorgegilcavazos.ballislife.data.local.LocalRepository;
 import com.gmail.jorgegilcavazos.ballislife.data.premium.PremiumService;
 import com.gmail.jorgegilcavazos.ballislife.features.application.BallIsLifeApplication;
+import com.gmail.jorgegilcavazos.ballislife.features.gamestats.QuarterByQuarterScoreComponent;
 import com.gmail.jorgegilcavazos.ballislife.features.gamethread.CommentsActivity;
 import com.gmail.jorgegilcavazos.ballislife.features.model.BoxScoreValues;
 import com.gmail.jorgegilcavazos.ballislife.features.model.StatLine;
 import com.gmail.jorgegilcavazos.ballislife.features.model.SwishTheme;
+import com.gmail.jorgegilcavazos.ballislife.features.model.Team;
 import com.gmail.jorgegilcavazos.ballislife.util.ThemeUtils;
 import com.gmail.jorgegilcavazos.ballislife.util.UnitUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.common.base.Optional;
+import com.jakewharton.rxrelay2.PublishRelay;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +67,7 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
     @BindView(R.id.scrollView) ScrollView scrollView;
     @BindView(R.id.adView) AdView adView;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.qtrByQtrScoreContainer) ViewGroup qtrByQtrScoreContainer;
 
     private Unbinder unbinder;
 
@@ -70,6 +76,10 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
     private String gameId;
     private BoxScoreSelectedTeam teamSelected;
     private int textColor;
+
+    private QuarterByQuarterScoreComponent quarterByQuarterScoreComponent;
+    private PublishRelay<QuarterByQuarterScoreComponent.Event> qtrByQtrScoreEvents =
+            PublishRelay.create();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +127,13 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
             adView.setVisibility(View.VISIBLE);
             adView.loadAd(new AdRequest.Builder().build());
         }
+
+        quarterByQuarterScoreComponent = new QuarterByQuarterScoreComponent(
+                qtrByQtrScoreContainer,
+                qtrByQtrScoreEvents,
+                Team.Companion.fromKey(homeTeam),
+                Team.Companion.fromKey(awayTeam)
+        );
     }
 
     @Override
@@ -264,6 +281,11 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
         }
         displayTeamTotalStats(total);
         scrollView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showQuarterByQuarterTable(@NotNull QuarterByQuarterStats stats) {
+        qtrByQtrScoreEvents.accept(new QuarterByQuarterScoreComponent.Event.StatsUpdated(stats));
     }
 
     @Override
