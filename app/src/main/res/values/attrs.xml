@@ -3,6 +3,7 @@
     <declare-styleable name="CustomTheme">
         <attr name="commentBackgroundLight" format="color"/>
         <attr name="commentBackgroundDark" format="color"/>
+        <attr name="commentDividerColor" format="color"/>
         <attr name="iconTint" format="color"/>
         <attr name="colorPrimaryLight" format="color"/>
         <attr name="separator" format="color" />

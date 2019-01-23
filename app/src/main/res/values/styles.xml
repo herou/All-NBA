@@ -15,6 +15,7 @@
         <item name="iconTint">@color/active_icon</item>
         <item name="separator">@color/dividerLight</item>
         <item name="cardsDialog">@color/cardBackgroundLight</item>
+        <item name="commentDividerColor">@color/dividerLight</item>
 
         <!-- Box score drawables -->
         <item name="boxScoreSquareWhite">@drawable/square_white</item>
@@ -36,6 +37,7 @@
         <item name="iconTint">@color/active_icon_dark</item>
         <item name="separator">@color/dividerDark</item>
         <item name="cardsDialog">@color/cardBackgroundDark</item>
+        <item name="commentDividerColor">@color/nightColorPrimary</item>
 
         <!-- Box score drawables -->
         <item name="boxScoreSquareWhite">@drawable/square_white_dark</item>
