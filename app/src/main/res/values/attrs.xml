@@ -9,8 +9,12 @@
         <attr name="separator" format="color" />
         <attr name="cardsDialog" format="color" />
 
-        <attr name="boxScoreSquareWhite" format="reference" />
-        <attr name="boxScoreSquareBlack" format="reference" />
+        <attr name="boxScoreSquareUnselectedFillColor" format="color" />
+        <attr name="boxScoreSquareUnselectedBorderColor" format="color" />
+        <attr name="boxScoreSquareUnselectedTextColor" format="color" />
+        <attr name="boxScoreSquareSelectedFillColor" format="color" />
+        <attr name="boxScoreSquareSelectedBorderColor" format="color" />
+        <attr name="boxScoreSquareSelectedTextColor" format="color" />
         <attr name="boxScoreBackground" format="color" />
     </declare-styleable>
 </resources>

@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -54,17 +55,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:background="?attr/boxScoreSquareWhite"
-                    android:text="SAS - 81"/>
+                    android:background="@drawable/box_score_square_unselected"
+                    android:textColor="?attr/boxScoreSquareUnselectedTextColor"
+                    tools:text="SAS"/>
 
                 <Button
                     android:id="@+id/button_home"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:background="?attr/boxScoreSquareBlack"
-                    android:text="ATL (67)"
-                    android:textColor="@color/white"/>
+                    android:background="@drawable/box_score_square_selected"
+                    tools:text="ATL"
+                    android:textColor="?attr/boxScoreSquareSelectedTextColor"/>
 
             </LinearLayout>
 

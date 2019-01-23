@@ -18,8 +18,12 @@
         <item name="commentDividerColor">@color/dividerLight</item>
 
         <!-- Box score drawables -->
-        <item name="boxScoreSquareWhite">@drawable/square_white</item>
-        <item name="boxScoreSquareBlack">@drawable/square_black</item>
+        <item name="boxScoreSquareUnselectedFillColor">@color/white</item>
+        <item name="boxScoreSquareUnselectedBorderColor">@color/colorPrimary</item>
+        <item name="boxScoreSquareUnselectedTextColor">@color/primaryText</item>
+        <item name="boxScoreSquareSelectedFillColor">@color/colorPrimary</item>
+        <item name="boxScoreSquareSelectedBorderColor">@color/colorPrimary</item>
+        <item name="boxScoreSquareSelectedTextColor">@color/white</item>
         <item name="boxScoreBackground">@color/white</item>
     </style>
 
@@ -40,8 +44,12 @@
         <item name="commentDividerColor">@color/nightColorPrimary</item>
 
         <!-- Box score drawables -->
-        <item name="boxScoreSquareWhite">@drawable/square_white_dark</item>
-        <item name="boxScoreSquareBlack">@drawable/square_black_dark</item>
+        <item name="boxScoreSquareUnselectedFillColor">#424242</item>
+        <item name="boxScoreSquareUnselectedBorderColor">@color/nightColorPrimaryDark</item>
+        <item name="boxScoreSquareUnselectedTextColor">@color/nightPrimaryText</item>
+        <item name="boxScoreSquareSelectedFillColor">@color/nightColorPrimaryDark</item>
+        <item name="boxScoreSquareSelectedBorderColor">@color/nightColorPrimaryDark</item>
+        <item name="boxScoreSquareSelectedTextColor">@color/nightPrimaryText</item>
         <item name="boxScoreBackground">#303030</item>
     </style>
 

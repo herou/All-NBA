@@ -1,11 +1,13 @@
 package com.gmail.jorgegilcavazos.ballislife.features.boxscore;
 
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +32,6 @@ import com.gmail.jorgegilcavazos.ballislife.features.model.BoxScoreValues;
 import com.gmail.jorgegilcavazos.ballislife.features.model.StatLine;
 import com.gmail.jorgegilcavazos.ballislife.features.model.SwishTheme;
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team;
-import com.gmail.jorgegilcavazos.ballislife.util.ThemeUtils;
 import com.gmail.jorgegilcavazos.ballislife.util.UnitUtils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -75,7 +76,6 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
     private String awayTeam;
     private String gameId;
     private BoxScoreSelectedTeam teamSelected;
-    private int textColor;
 
     private PublishRelay<QuarterByQuarterScoreComponent.Event> qtrByQtrScoreEvents =
             PublishRelay.create();
@@ -100,12 +100,11 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
         unbinder = ButterKnife.bind(this, view);
 
         teamSelected = BoxScoreSelectedTeam.VISITOR;
+        setHomeAwayTextColor();
         setHomeAwayBackground();
 
         btnAway.setText(awayTeam);
         btnHome.setText(homeTeam);
-
-        textColor = ThemeUtils.Companion.getTextColor(getActivity(), localRepository.getAppTheme());
 
         presenter.attachView(this);
         presenter.loadBoxScore(gameId, teamSelected, true /* forceNetwork */);
@@ -174,10 +173,8 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
     @OnClick(R.id.button_away)
     public void onButtonAwayClick() {
-        btnAway.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-        btnHome.setTextColor(textColor);
-
         teamSelected = BoxScoreSelectedTeam.VISITOR;
+        setHomeAwayTextColor();
         setHomeAwayBackground();
 
         presenter.loadBoxScore(gameId, teamSelected, false /* forceNetwork */);
@@ -185,10 +182,8 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
     @OnClick(R.id.button_home)
     public void onButtonHomeClick() {
-        btnHome.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-        btnAway.setTextColor(textColor);
-
         teamSelected = BoxScoreSelectedTeam.HOME;
+        setHomeAwayTextColor();
         setHomeAwayBackground();
 
         presenter.loadBoxScore(gameId, teamSelected, false /* forceNetwork */);
@@ -475,22 +470,56 @@ public class BoxScoreFragment extends Fragment implements BoxScoreView {
 
     private void setHomeAwayBackground() {
         if (teamSelected == BoxScoreSelectedTeam.VISITOR) {
-            if (localRepository.getAppTheme() == SwishTheme.DARK) {
-                btnAway.setBackgroundResource(R.drawable.square_black_dark);
-                btnHome.setBackgroundResource(R.drawable.square_white_dark);
-            } else {
-                btnAway.setBackgroundResource(R.drawable.square_black);
-                btnHome.setBackgroundResource(R.drawable.square_white);
-            }
+            btnAway.setBackgroundResource(R.drawable.box_score_square_selected);
+            btnHome.setBackgroundResource(R.drawable.box_score_square_unselected);
         } else {
-            if (localRepository.getAppTheme() == SwishTheme.DARK) {
-                btnHome.setBackgroundResource(R.drawable.square_black_dark);
-                btnAway.setBackgroundResource(R.drawable.square_white_dark);
-            } else {
-                btnHome.setBackgroundResource(R.drawable.square_black);
-                btnAway.setBackgroundResource(R.drawable.square_white);
-            }
+            btnHome.setBackgroundResource(R.drawable.box_score_square_selected);
+            btnAway.setBackgroundResource(R.drawable.box_score_square_unselected);
         }
+    }
+
+    private void setHomeAwayTextColor() {
+        if (teamSelected == BoxScoreSelectedTeam.VISITOR) {
+            btnAway.setTextColor(
+                    getSelectedTextColor(getActivity(), localRepository.getAppTheme())
+            );
+            btnHome.setTextColor(
+                    getUnselectedTextColor(getActivity(), localRepository.getAppTheme())
+            );
+        } else {
+            btnHome.setTextColor(
+                    getSelectedTextColor(getActivity(), localRepository.getAppTheme())
+            );
+            btnAway.setTextColor(
+                    getUnselectedTextColor(getActivity(), localRepository.getAppTheme())
+            );
+        }
+    }
+
+    private int getSelectedTextColor(Context context, SwishTheme theme) {
+        final int[] attrs = { R.attr.boxScoreSquareSelectedTextColor };
+        TypedArray typedArray;
+        if (theme == SwishTheme.DARK) {
+            typedArray = context.obtainStyledAttributes(R.style.AppTheme_Dark, attrs);
+        } else {
+            typedArray = context.obtainStyledAttributes(R.style.AppTheme, attrs);
+        }
+        int textColor = typedArray.getColor(0, Color.BLACK);
+        typedArray.recycle();
+        return textColor;
+    }
+
+    private int getUnselectedTextColor(Context context, SwishTheme theme) {
+        final int[] attrs = { R.attr.boxScoreSquareUnselectedTextColor };
+        TypedArray typedArray;
+        if (theme == SwishTheme.DARK) {
+            typedArray = context.obtainStyledAttributes(R.style.AppTheme_Dark, attrs);
+        } else {
+            typedArray = context.obtainStyledAttributes(R.style.AppTheme, attrs);
+        }
+        int textColor = typedArray.getColor(0, Color.BLACK);
+        typedArray.recycle();
+        return textColor;
     }
 
     @Override
