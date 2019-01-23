@@ -25,7 +25,8 @@ class GameSummaryComponent(
     parent: ViewGroup,
     events: Observable<Event>,
     homeTeam: Team,
-    visitorTeam: Team
+    visitorTeam: Team,
+    noSpoilersModeEnabled: Boolean
 ) {
 
   private val uiView = GameSummaryUIView(parent)
@@ -33,6 +34,7 @@ class GameSummaryComponent(
   init {
     uiView.setHomeTeamInfo(homeTeam)
     uiView.setVisitorTeamInfo(visitorTeam)
+    if (noSpoilersModeEnabled) uiView.setScoresToHyphen()
 
     val disposable = events
         .subscribe { event ->
@@ -54,8 +56,10 @@ class GameSummaryComponent(
                 LIVE -> {
                   uiView.setGameState(GameState.LIVE)
 
-                  uiView.setHomeScore(game.homeTeamScore)
-                  uiView.setVisitorScore(game.awayTeamScore)
+                  if (!noSpoilersModeEnabled) {
+                    uiView.setHomeScore(game.homeTeamScore)
+                    uiView.setVisitorScore(game.awayTeamScore)
+                  }
                   uiView.setClock(game.gameClock)
                   uiView.setPeriod(Utilities.getPeriodString(game.periodValue, game.periodName))
 
@@ -72,8 +76,10 @@ class GameSummaryComponent(
                 POST -> {
                   uiView.setGameState(GameState.POST)
 
-                  uiView.setHomeScore(game.homeTeamScore)
-                  uiView.setVisitorScore(game.awayTeamScore)
+                  if (!noSpoilersModeEnabled) {
+                    uiView.setHomeScore(game.homeTeamScore)
+                    uiView.setVisitorScore(game.awayTeamScore)
+                  }
                 }
               }
             }

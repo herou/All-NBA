@@ -103,6 +103,11 @@ class GameSummaryUIView(parent: ViewGroup) {
     visitorScore.text = score
   }
 
+  fun setScoresToHyphen() {
+    homeScore.text = "-"
+    visitorScore.text = "-"
+  }
+
   fun setClockVisibility(visible: Boolean) {
     clock.visibility = if (visible) View.VISIBLE else View.GONE
   }

@@ -141,7 +141,8 @@ class CommentsActivity : BaseNoActionBarActivity(), View.OnClickListener {
         parent = gameSummary,
         events = gameSummaryEvents,
         homeTeam = Team.fromKey(homeTeam),
-        visitorTeam = Team.fromKey(visitorTeam)
+        visitorTeam = Team.fromKey(visitorTeam),
+        noSpoilersModeEnabled = localRepository.noSpoilersModeEnabled()
     )
     if (localRepository.isGameThreadStreamingEnabled) {
       gameSummaryEvents.accept(Event.StreamingEnabled)
