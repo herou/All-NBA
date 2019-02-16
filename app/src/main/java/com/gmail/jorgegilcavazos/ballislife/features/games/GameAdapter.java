@@ -117,12 +117,10 @@ public class GameAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 GameV2 nbaGame,
                 PublishSubject<GameV2> gameClicks,
                 boolean isLastGame) {
-            int resKeyHome = itemView.getContext().getResources().getIdentifier(nbaGame
-                    .getHomeTeamAbbr().toLowerCase(), "drawable", itemView.getContext()
-                    .getPackageName());
-            int resKeyAway = itemView.getContext().getResources().getIdentifier(nbaGame
-                    .getAwayTeamAbbr().toLowerCase(), "drawable", itemView.getContext()
-                    .getPackageName());
+            int resKeyHome = TeamUtils.Companion
+                    .getTeamLogo(nbaGame.getHomeTeamKey().toUpperCase());
+            int resKeyAway = TeamUtils.Companion
+                    .getTeamLogo(nbaGame.getAwayTeamKey().toUpperCase());
 
             // Set favorite team marker if game has fav team.
             favoriteMarker.setVisibility(View.GONE);

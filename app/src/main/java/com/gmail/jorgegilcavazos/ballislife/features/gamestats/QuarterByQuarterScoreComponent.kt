@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import com.gmail.jorgegilcavazos.ballislife.features.boxscore.QuarterByQuarterStats
 import com.gmail.jorgegilcavazos.ballislife.features.gamestats.QuarterByQuarterScoreComponent.Event.StatsUpdated
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team
+import com.gmail.jorgegilcavazos.ballislife.util.TeamUtils
 import io.reactivex.Observable
 
 class QuarterByQuarterScoreComponent(
@@ -17,15 +18,9 @@ class QuarterByQuarterScoreComponent(
 
   init {
     uiView.setHomeTeamName(homeTeam.key)
-    uiView.setHomeTeamLogo(
-        parent.context.resources.getIdentifier(
-            homeTeam.key.toLowerCase(), "drawable", parent.context.packageName)
-    )
+    uiView.setHomeTeamLogo(TeamUtils.getTeamLogo(homeTeam.key))
     uiView.setVisitorTeamName(visitorTeam.key)
-    uiView.setVisitorTeamLogo(
-        parent.context.resources.getIdentifier(
-            visitorTeam.key.toLowerCase(), "drawable", parent.context.packageName)
-    )
+    uiView.setVisitorTeamLogo(TeamUtils.getTeamLogo(visitorTeam.key))
     uiView.setOTVisibility(false) // Hidden by default
 
     val disposable = events

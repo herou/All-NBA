@@ -32,7 +32,13 @@ enum class Team(val fullName: String, val key: String, val nickName: String) {
   SAS("San Antonio Spurs", "SAS", "Spurs"),
   TOR("Toronto Raptors", "TOR", "Raptors"),
   UTA("Utah Jazz", "UTA", "Jazz"),
-  WAS("Washington Wizards", "WAS", "Wizards");
+  WAS("Washington Wizards", "WAS", "Wizards"),
+  USA("USA", "USA", "USA"),
+  WORLD("World", "WLD", "World"),
+  EST("East", "EST", "East"),
+  WST("West", "WST", "West"),
+  LBN("Lebron", "LBN", "Lebron"),
+  GNS("Giannis", "GNS", "Giannis");
 
   companion object {
     private val map = values().associateBy { it.key }

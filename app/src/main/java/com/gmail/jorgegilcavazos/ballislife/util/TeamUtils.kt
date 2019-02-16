@@ -24,7 +24,7 @@ class TeamUtils {
       "MIL" -> R.drawable.mil
       "MIN" -> R.drawable.min
       "NO", "NOP" -> R.drawable.nop
-      "NY" -> R.drawable.nyk
+      "NY", "NYK" -> R.drawable.nyk
       "OKC" -> R.drawable.okc
       "ORL" -> R.drawable.orl
       "PHI" -> R.drawable.phi
@@ -35,6 +35,10 @@ class TeamUtils {
       "TOR" -> R.drawable.tor
       "UTAH", "UTA" -> R.drawable.uta
       "WSH", "WAS" -> R.drawable.was
+      "USA" -> R.drawable.usa
+      "WLD" -> R.drawable.wld
+      "EST" -> R.drawable.east
+      "WST" -> R.drawable.west
       else -> R.drawable.rnbasnoo
     }
 

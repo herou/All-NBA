@@ -17,6 +17,7 @@ import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIVie
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamChecked
 import com.gmail.jorgegilcavazos.ballislife.features.gamedetail.GameSummaryUIView.GameSummaryUiEvent.StreamUnchecked
 import com.gmail.jorgegilcavazos.ballislife.features.model.Team
+import com.gmail.jorgegilcavazos.ballislife.util.TeamUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 
@@ -67,22 +68,12 @@ class GameSummaryUIView(parent: ViewGroup) {
   fun getUiEvents(): Observable<GameSummaryUiEvent> = uiEvents
 
   fun setHomeTeamInfo(team: Team) {
-    val logoRes = view.context.resources.getIdentifier(
-        team.key.toLowerCase(),
-        "drawable",
-        view.context.packageName
-    )
-    homeLogo.setImageResource(logoRes)
+    homeLogo.setImageResource(TeamUtils.getTeamLogo(team.key))
     homeName.text = team.key
   }
 
   fun setVisitorTeamInfo(team: Team) {
-    val logoRes = view.context.resources.getIdentifier(
-        team.key.toLowerCase(),
-        "drawable",
-        view.context.packageName
-    )
-    visitorLogo.setImageResource(logoRes)
+    visitorLogo.setImageResource(TeamUtils.getTeamLogo(team.key))
     visitorName.text = team.key
   }
 
