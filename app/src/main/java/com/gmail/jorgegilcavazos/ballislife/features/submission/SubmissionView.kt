@@ -88,5 +88,5 @@ interface SubmissionView {
 
   fun showErrorLoadingMoreComments()
 
-  fun share(url: String?)
+  fun share(url: String)
 }

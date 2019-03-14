@@ -39,7 +39,6 @@ import net.dean.jraw.models.CommentSort;
 import net.dean.jraw.models.Submission;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -429,7 +428,7 @@ public class SubmissionActivity extends BaseNoActionBarActivity implements
     }
 
     @Override
-    public void share(@Nullable String url) {
+    public void share(@NonNull String url) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, url);
