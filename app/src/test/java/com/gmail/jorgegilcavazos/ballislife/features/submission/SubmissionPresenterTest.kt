@@ -9,6 +9,7 @@ import com.gmail.jorgegilcavazos.ballislife.data.repository.submissions.Submissi
 import com.gmail.jorgegilcavazos.ballislife.data.service.RedditService
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentItem
 import com.gmail.jorgegilcavazos.ballislife.features.model.CommentWrapper
+import com.gmail.jorgegilcavazos.ballislife.util.Constants
 import com.gmail.jorgegilcavazos.ballislife.util.ErrorHandler
 import com.gmail.jorgegilcavazos.ballislife.util.NetworkUtils
 import com.gmail.jorgegilcavazos.ballislife.util.schedulers.TrampolineSchedulerProvider
@@ -46,6 +47,7 @@ class SubmissionPresenterTest {
   private val commentUpvotes = PublishSubject.create<CommentWrapper>()
   private val commentDownvotes = PublishSubject.create<CommentWrapper>()
   private val commentNovotes = PublishSubject.create<CommentWrapper>()
+  private val submissionShares = PublishSubject.create<Submission>()
   private val submissionSaves = PublishSubject.create<Submission>()
   private val submissionUnsaves = PublishSubject.create<Submission>()
   private val submissionUpvotes = PublishSubject.create<Submission>()
@@ -69,6 +71,7 @@ class SubmissionPresenterTest {
     `when`(mockView.commentUpvotes()).thenReturn(commentUpvotes)
     `when`(mockView.commentDownvotes()).thenReturn(commentDownvotes)
     `when`(mockView.commentNovotes()).thenReturn(commentNovotes)
+    `when`(mockView.submissionShares()).thenReturn(submissionShares)
     `when`(mockView.submissionSaves()).thenReturn(submissionSaves)
     `when`(mockView.submissionUnsaves()).thenReturn(submissionUnsaves)
     `when`(mockView.submissionUpvotes()).thenReturn(submissionUpvotes)
@@ -153,6 +156,29 @@ class SubmissionPresenterTest {
 
     verify(mockRedditActions).voteComment(mockComment, VoteDirection.NO_VOTE)
     verify(mockView).showNotLoggedInError()
+  }
+
+  @Test
+  fun shareSubmissionShareSelfPost() {
+    val mockSubmission = Mockito.mock(Submission::class.java)
+    `when`(mockSubmission.isSelfPost).thenReturn(true)
+    `when`(mockSubmission.permalink).thenReturn("permalink")
+
+    submissionShares.onNext(mockSubmission)
+
+    verify(mockView).share(Constants.HTTPS +
+            Constants.REDDIT_DOMAIN + "permalink")
+  }
+
+  @Test
+  fun shareSubmissionShareNotSelfPost() {
+    val mockSubmission = Mockito.mock(Submission::class.java)
+    `when`(mockSubmission.isSelfPost).thenReturn(false)
+    `when`(mockSubmission.url).thenReturn("SelfPostUrl")
+
+    submissionShares.onNext(mockSubmission)
+
+    verify(mockView).share("SelfPostUrl")
   }
 
   @Test

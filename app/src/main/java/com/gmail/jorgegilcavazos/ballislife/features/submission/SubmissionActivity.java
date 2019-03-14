@@ -39,6 +39,7 @@ import net.dean.jraw.models.CommentSort;
 import net.dean.jraw.models.Submission;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -217,6 +218,12 @@ public class SubmissionActivity extends BaseNoActionBarActivity implements
     @Override
     public Observable<CommentWrapper> commentNovotes() {
         return threadAdapter.getNovotes();
+    }
+
+    @NotNull
+    @Override
+    public Observable<Submission> submissionShares() {
+        return threadAdapter.getSubmissionShares();
     }
 
     @NotNull
@@ -419,5 +426,14 @@ public class SubmissionActivity extends BaseNoActionBarActivity implements
     @Override
     public void showNoNetAvailable() {
         Toast.makeText(this, R.string.your_device_is_offline, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void share(@Nullable String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent,
+                getResources().getString(R.string.share_this_link)));
     }
 }

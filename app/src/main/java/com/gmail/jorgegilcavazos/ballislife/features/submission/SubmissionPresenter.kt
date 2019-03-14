@@ -85,6 +85,15 @@ class SubmissionPresenter @Inject constructor(
 					}
 				}.addTo(disposables)
 
+        view.submissionShares().subscribe {
+            if (it.isSelfPost) {
+                view.share(Constants.HTTPS + Constants.REDDIT_DOMAIN +
+                        it.permalink)
+            } else {
+                view.share(it.url)
+            }
+        }.addTo(disposables)
+
 		view.submissionSaves()
 				.subscribe {
 					redditActions.savePublicContribution(it)

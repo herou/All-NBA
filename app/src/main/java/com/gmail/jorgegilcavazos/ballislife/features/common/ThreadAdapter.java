@@ -73,6 +73,7 @@ public class ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private PublishSubject<CommentWrapper> downvotes = PublishSubject.create();
     private PublishSubject<CommentWrapper> novotes = PublishSubject.create();
     private PublishSubject<CommentWrapper> replies = PublishSubject.create();
+    private PublishSubject<Submission> submissionShares = PublishSubject.create();
     private PublishSubject<Submission> submissionSaves = PublishSubject.create();
     private PublishSubject<Submission> submissionUnsaves = PublishSubject.create();
     private PublishSubject<Submission> submissionUpvotes = PublishSubject.create();
@@ -130,8 +131,9 @@ public class ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof FullCardViewHolder) {
             ((FullCardViewHolder) holder).bindData(context, localRepository,
-                    submissionWrapper, submissionSaves, submissionUnsaves, submissionUpvotes,
-                    submissionDownvotes, submissionNovotes, submissionContentClicks);
+                    submissionWrapper, submissionShares, submissionSaves, submissionUnsaves,
+                    submissionUpvotes, submissionDownvotes, submissionNovotes,
+                    submissionContentClicks);
         } else if (holder instanceof CommentViewHolder) {
             final CommentViewHolder commentHolder = (CommentViewHolder) holder;
 
@@ -344,6 +346,10 @@ public class ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public Observable<CommentWrapper> getReplies() {
         return replies;
+    }
+
+    public PublishSubject<Submission> getSubmissionShares() {
+        return submissionShares;
     }
 
     public Observable<Submission> getSubmissionSaves() {

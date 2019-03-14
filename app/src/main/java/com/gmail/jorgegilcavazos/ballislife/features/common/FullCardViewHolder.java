@@ -47,6 +47,7 @@ public class FullCardViewHolder extends RecyclerView.ViewHolder {
     public @BindView(R.id.text_points) TextView tvPoints;
     public @BindView(R.id.button_downvote) ImageButton btnDownvote;
     public @BindView(R.id.button_save) ImageButton btnSave;
+    public @BindView(R.id.button_share) ImageButton btnShare;
     public @BindView(R.id.content_link) LinearLayout containerLink;
     public @BindView(R.id.text_domain_link) TextView tvDomainLink;
     public @BindView(R.id.text_link) TextView tvLink;
@@ -79,6 +80,7 @@ public class FullCardViewHolder extends RecyclerView.ViewHolder {
     public void bindData(final Context context,
                          final LocalRepository localRepository,
                          final SubmissionWrapper submissionWrapper,
+                         final PublishSubject<Submission> shareSubject,
                          final PublishSubject<Submission> submissionSaves,
                          final PublishSubject<Submission> submissionUnsaves,
                          final PublishSubject<Submission> submissionUpvotes,
@@ -229,6 +231,10 @@ public class FullCardViewHolder extends RecyclerView.ViewHolder {
                     submissionWrapper.setSaved(true);
                 }
             }
+        });
+
+        btnShare.setOnClickListener(v -> {
+            shareSubject.onNext(submissionWrapper.getSubmission());
         });
 
         ivThumbnail.setOnClickListener(v -> submissionContentClicks.onNext(url));
