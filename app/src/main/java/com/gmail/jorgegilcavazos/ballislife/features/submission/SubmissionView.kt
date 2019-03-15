@@ -20,6 +20,8 @@ interface SubmissionView {
 
   fun commentNovotes(): Observable<CommentWrapper>
 
+  fun submissionShares(): Observable<Submission>
+
   fun submissionSaves(): Observable<Submission>
 
   fun submissionUnsaves(): Observable<Submission>
@@ -82,7 +84,9 @@ interface SubmissionView {
 
   fun uncollapseComments(id: String)
 
-	fun insertItemsBelowParent(threadItems: List<ThreadItem>, parentNode: CommentNode)
+  fun insertItemsBelowParent(threadItems: List<ThreadItem>, parentNode: CommentNode)
 
-	fun showErrorLoadingMoreComments()
+  fun showErrorLoadingMoreComments()
+
+  fun share(url: String)
 }

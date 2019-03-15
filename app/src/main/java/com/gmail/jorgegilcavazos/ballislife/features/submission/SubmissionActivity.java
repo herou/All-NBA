@@ -221,6 +221,12 @@ public class SubmissionActivity extends BaseNoActionBarActivity implements
 
     @NotNull
     @Override
+    public Observable<Submission> submissionShares() {
+        return threadAdapter.getSubmissionShares();
+    }
+
+    @NotNull
+    @Override
     public Observable<Submission> submissionSaves() {
         return threadAdapter.getSubmissionSaves();
     }
@@ -419,5 +425,14 @@ public class SubmissionActivity extends BaseNoActionBarActivity implements
     @Override
     public void showNoNetAvailable() {
         Toast.makeText(this, R.string.your_device_is_offline, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void share(@NonNull String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent,
+                getResources().getString(R.string.share_this_link)));
     }
 }
