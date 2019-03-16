@@ -251,6 +251,23 @@ public class RedditServiceImpl implements RedditService {
     }
 
     @Override
+    public Completable hideSubmission(RedditClient redditClient,
+                                      Submission submission,
+                                      boolean hide) {
+        return Completable.create(e -> {
+            AccountManager accountManager = new AccountManager(redditClient);
+            try {
+                accountManager.hide(hide, submission);
+                e.onComplete();
+            } catch (Exception ex) {
+                if (!e.isDisposed()) {
+                    e.onError(ex);
+                }
+            }
+        });
+    }
+
+    @Override
     public Single<SubscriberCount> getSubscriberCount(
             final RedditClient redditClient,
             final String subreddit) {

@@ -13,4 +13,6 @@ public interface OnSubmissionClickListener {
     void onSaveSubmission(SubmissionWrapper submission, boolean saved);
 
     void onContentClick(String url);
+
+    void onHideSubmission(SubmissionWrapper submissionWrapper);
 }

@@ -99,6 +99,12 @@ public interface RedditService {
     Completable saveSubmission(RedditClient redditClient, Submission submission, boolean saved);
 
     /**
+     * Returns an Rx Completable that hides or un-hides the given submission for the currently
+     * logged-in user.
+     */
+    Completable hideSubmission(RedditClient redditClient, Submission submission, boolean hide);
+
+    /**
      * Returns an Rx Single that emits the subscriber count of the given subreddit.
      */
     Single<SubscriberCount> getSubscriberCount(RedditClient redditClient, String subreddit);

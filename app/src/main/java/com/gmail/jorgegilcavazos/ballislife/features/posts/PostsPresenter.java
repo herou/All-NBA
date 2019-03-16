@@ -260,6 +260,49 @@ public class PostsPresenter extends BasePresenter<PostsView> {
         );
     }
 
+    public void onHide(final SubmissionWrapper submissionWrapper,
+                       int index, final boolean hide) {
+        if (!redditAuthentication.isUserLoggedIn()) {
+            view.showNotLoggedInToast();
+            return;
+        }
+
+        disposables.add(redditAuthentication.authenticate()
+                .andThen(redditAuthentication.checkUserLoggedIn()).flatMapCompletable(loggedIn -> {
+                    if (loggedIn) {
+                        return redditService.hideSubmission(redditAuthentication.getRedditClient(),
+                                submissionWrapper.getSubmission(),
+                                hide);
+                    } else {
+                        throw new NotLoggedInException();
+                    }
+                })
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        if (!isViewAttached()) {
+                            return;
+                        }
+                        if (hide) {
+                            view.hideSubmission(submissionWrapper, index);
+                            view.showHideSubmissionSnackbar(submissionWrapper, index);
+                        } else {
+                            view.unHideSubmission(submissionWrapper, index);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (isViewAttached()) {
+                            view.showUnknownErrorToast();
+                        }
+                    }
+                })
+        );
+    }
+
     public void onContentClick(String url) {
         if (url != null) {
             if (url.contains(Constants.STREAMABLE_DOMAIN)) {
