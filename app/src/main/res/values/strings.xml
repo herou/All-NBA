@@ -102,6 +102,7 @@
     <string name="action_sort_top_month">Month</string>
     <string name="action_sort_top_year">Year</string>
     <string name="action_sort_top_all">All</string>
+    <string name="action_hide">Hide</string>
     <string name="change_view">Change View</string>
     <string name="card_view">Card View</string>
     <string name="card_view_description">Larger HD images, uses more data</string>
@@ -698,4 +699,6 @@
     <string name="game_detail_final">FINAL</string>
     <string name="game_detail_halftime">Halftime</string>
     <string name="game_detail_stream">STREAM</string>
+    <string name="undo_string">Undo</string>
+    <string name="submission_hidden">Post hidden successfully.</string>
 </resources>

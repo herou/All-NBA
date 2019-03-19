@@ -8,6 +8,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -185,6 +186,7 @@ public class WideCardViewHolder extends RecyclerView.ViewHolder {
                 submissionClickListener);
         initThumbnailListener(url, submissionClickListener);
         initContainerListener(submissionWrapper, submissionClickListener);
+        initMoreBtnListener(context, submissionWrapper, submissionClickListener);
     }
 
     private void setUpvotedColors(Context context) {
@@ -319,5 +321,31 @@ public class WideCardViewHolder extends RecyclerView.ViewHolder {
                                        final OnSubmissionClickListener submissionClickListener) {
         layoutContainer.setOnClickListener(v -> submissionClickListener.onSubmissionClick
                 (submissionWrapper.getId()));
+    }
+
+    private void initMoreBtnListener(Context context,
+                                     SubmissionWrapper submissionWrapper,
+                                     OnSubmissionClickListener submissionClickListener) {
+        btnMore.setOnClickListener(btn -> createPopUpMenu(context,
+                btn,
+                submissionWrapper,
+                submissionClickListener));
+    }
+
+    private void createPopUpMenu(Context context,
+                                 View btn,
+                                 SubmissionWrapper submissionWrapper,
+                                 OnSubmissionClickListener submissionClickListener) {
+        PopupMenu popupMenu = new PopupMenu(context, btn);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_post_overflow, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.action_hide:
+                    submissionClickListener.onHideSubmission(submissionWrapper);
+                    return true;
+            }
+            return false;
+        });
+        popupMenu.show();
     }
 }

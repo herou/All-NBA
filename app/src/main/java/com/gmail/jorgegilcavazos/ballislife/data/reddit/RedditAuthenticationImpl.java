@@ -161,7 +161,7 @@ public class RedditAuthenticationImpl implements RedditAuthentication {
         OAuthHelper oAuthHelper = mRedditClient.getOAuthHelper();
         Credentials credentials = Credentials.installedApp(CLIENT_ID, REDIRECT_URL);
         String[] scopes = {"identity", "edit", "flair", "mysubreddits", "read", "vote",
-                "submit", "subscribe", "history", "save"};
+                "submit", "subscribe", "history", "save", "report"};
         return oAuthHelper.getAuthorizationUrl(credentials, true, true, scopes);
     }
 

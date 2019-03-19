@@ -41,4 +41,10 @@ public interface PostsView {
     void showUnknownErrorToast();
 
     void setNbaSubChips(NBASubChips nbaSubChips);
+
+    void hideSubmission(SubmissionWrapper submission, int index);
+
+    void showHideSubmissionSnackbar(SubmissionWrapper submission, int index);
+
+    void unHideSubmission(SubmissionWrapper submissionWrapper, int index);
 }

@@ -74,6 +74,7 @@ public class PostsFragment extends Fragment implements PostsView,
     @Inject EventLogger eventLogger;
     @Inject PremiumService premiumService;
 
+    @BindView(R.id.posts_content) View postsContainer;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView_posts) RecyclerView recyclerViewPosts;
     @BindView(R.id.adView) AdView adView;
@@ -424,8 +425,33 @@ public class PostsFragment extends Fragment implements PostsView,
     }
 
     @Override
+    public void onHideSubmission(SubmissionWrapper submission) {
+        int index = postsAdapter.getIndexOfSubmission(submission);
+        presenter.onHide(submission, index, true);
+    }
+
+    @Override
     public void setNbaSubChips(NBASubChips nbaSubChips) {
         postsAdapter.setNBASubChips(nbaSubChips);
+    }
+
+    @Override
+    public void hideSubmission(SubmissionWrapper submission, int index) {
+        postsAdapter.removePost(submission);
+    }
+
+    @Override
+    public void showHideSubmissionSnackbar(SubmissionWrapper submission, int index) {
+        Snackbar snackbar = Snackbar.make(postsContainer,
+                R.string.submission_hidden,
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.undo_string, view -> presenter.onHide(submission, index, false));
+        snackbar.show();
+    }
+
+    @Override
+    public void unHideSubmission(SubmissionWrapper submission, int index) {
+        postsAdapter.addSubmissionAtIndex(submission, index);
     }
 
     private void openViewPickerDialog() {

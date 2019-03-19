@@ -184,4 +184,19 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         }
     }
+
+    public void removePost(SubmissionWrapper submission) {
+        int index = postsList.indexOf(submission);
+        postsList.remove(index);
+        notifyItemRemoved(index + 1); // +1 for the header
+    }
+
+    public void addSubmissionAtIndex(SubmissionWrapper submissionWrapper, int index) {
+        postsList.add(index, submissionWrapper);
+        notifyItemInserted(index + 1); // +1 for the header
+    }
+
+    public int getIndexOfSubmission(SubmissionWrapper submission) {
+        return postsList.indexOf(submission);
+    }
 }
