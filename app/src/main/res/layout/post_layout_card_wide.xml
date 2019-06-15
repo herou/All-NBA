@@ -157,8 +157,8 @@
                     android:tint="?android:attr/textColorPrimary"/>
 
                 <ImageButton
-                    android:visibility="gone"
                     android:id="@+id/button_more"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackgroundBorderless"

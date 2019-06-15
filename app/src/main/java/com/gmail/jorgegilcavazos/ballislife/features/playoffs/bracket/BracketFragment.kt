@@ -57,7 +57,7 @@ class BracketFragment : Fragment() {
 
   override fun onStart() {
     super.onStart()
-    val playoffsRef = firestore.collection("playoff_picture").document("2018").collection("1")
+    val playoffsRef = firestore.collection("playoff_picture").document("2019").collection("1")
     playoffsRef.getSingle<MatchUp>()
         .observeOn(schedulerProvider.ui())
         .subscribe { matchUps ->
